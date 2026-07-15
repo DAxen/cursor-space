@@ -248,6 +248,41 @@ def add_arrow(slide, left, top, width, height):
     return ar
 
 
+def add_placeholder(slide, left, top, width, height, label, hint):
+    """预留粘贴区:浅底 + 虚线边框 + 居中提示文字。"""
+    box = slide.shapes.add_shape(
+        MSO_SHAPE.ROUNDED_RECTANGLE, left, top, width, height
+    )
+    box.adjustments[0] = 0.03
+    box.fill.solid()
+    box.fill.fore_color.rgb = RGBColor(0xFB, 0xFB, 0xFB)
+    box.line.color.rgb = RGBColor(0xBF, 0xBF, 0xBF)
+    box.line.width = Pt(1.25)
+    box.shadow.inherit = False
+    # 虚线边框
+    ln = box.line._get_or_add_ln()
+    dash = ln.makeelement(qn('a:prstDash'), {'val': 'dash'})
+    ln.append(dash)
+
+    tf = box.text_frame
+    tf.word_wrap = True
+    tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+    tf.margin_left = Inches(0.16)
+    tf.margin_right = Inches(0.16)
+    p = tf.paragraphs[0]
+    p.alignment = PP_ALIGN.CENTER
+    r = p.add_run()
+    r.text = label
+    set_run_font(r, 13, RGBColor(0x80, 0x80, 0x80), bold=True)
+    p2 = tf.add_paragraph()
+    p2.alignment = PP_ALIGN.CENTER
+    p2.space_before = Pt(6)
+    r2 = p2.add_run()
+    r2.text = hint
+    set_run_font(r2, 10, RGBColor(0xA6, 0xA6, 0xA6))
+    return box
+
+
 def add_footer(slide, text, prs):
     box = slide.shapes.add_textbox(MARGIN_L, prs.slide_height - Inches(0.4),
                                    CONTENT_W, Inches(0.3))
@@ -350,7 +385,7 @@ def build_page1(prs, blank):
                  ("辅助编码", True), (",验证工程价值。", False)],
              bullet=True, size=10)
 
-    add_footer(s, "第 1 页 / 共 2 页", prs)
+    add_footer(s, "第 1 页 / 共 3 页", prs)
 
 
 def build_page2(prs, blank):
@@ -431,7 +466,84 @@ def build_page2(prs, blank):
                  (",并尝试", False), ("测试用例生成", True), ("。", False)],
              bullet=True, size=10.5)
 
-    add_footer(s, "第 2 页 / 共 2 页", prs)
+    add_footer(s, "第 2 页 / 共 3 页", prs)
+
+
+def build_page3(prs, blank):
+    s = prs.slides.add_slide(blank)
+    set_white_background(s, prs)
+    add_title(s, "Skill 和 Spec 规范建设进展")
+    add_title_rule(s, Inches(0.95))
+    add_subtitle(s, "背景、整体进展、开发流程与下一步计划", Inches(1.06))
+
+    add_conclusion(
+        s,
+        [("背景:", True),
+         ("各团队自行开发的 Skill 越来越多,缺乏统一管理方式,不利于资产有序沉淀与能力共享。  ",
+          False),
+         ("整体进展:", True),
+         ("已完成", False), ("公司级 Skill 管理规范评审", True),
+         ("并达成初步一致;AI 团队已落地 ", False),
+         ("LM 团队级 Skill 管理规范试点", True), ("。", False)],
+        top=Inches(1.54), height=Inches(0.72), size=11)
+
+    # ---- 正文左半区:结构化信息 ----
+    body_top = Inches(2.42)
+    body_bottom = Inches(7.02)
+    col_gap = Inches(0.3)
+    left_w = (CONTENT_W - col_gap) * 0.5
+    right_w = (CONTENT_W - col_gap) * 0.5
+    rx = MARGIN_L + left_w + col_gap
+
+    # 开发流程卡
+    flow_h = Inches(1.02)
+    _, f = add_card(s, MARGIN_L, body_top, left_w, flow_h,
+                    "Skill 开发流程(端到端)", title_size=11)
+    add_para(f, [("开发", True), ("(依 Skill 开规范) → ", False),
+                 ("提交", True), ("(依归档规则) → ", False),
+                 ("门禁检测", True), ("(依生成的门禁规则) → ", False),
+                 ("人工审核", True), (" → ", False), ("发布", True),
+                 (" → ", False), ("集成到 CodeAgent 使用", True)],
+             size=10, line_spacing=1.15)
+
+    # 进展卡
+    prog_top = body_top + flow_h + Inches(0.16)
+    prog_h = Inches(1.9)
+    _, pr = add_card(s, MARGIN_L, prog_top, left_w, prog_h, "进展")
+    add_para(pr, [("Skill 开规范", True), (":公司级", False), ("已发布", True),
+                  (";产品线级", False), ("初稿", True), (";PDU 级", False),
+                  ("待定义", True), (";AI 应用开发部定义", False),
+                  ("LM 团队级规范", True), ("试点。", False)],
+             bullet=True, size=9.5)
+    add_para(pr, [("Skill 归档规则", True), (":CMC 例会", False),
+                  ("已对齐达成一致", True), (" —— 代码仓特有存于 ", False),
+                  (".agent/skills 目录", True), (";跨仓公共", False),
+                  ("推送至产品线 skill 仓", True), ("。", False)],
+             bullet=True, size=9.5)
+    add_para(pr, [("Skill 门禁检查规则", True), (":产品线", False),
+                  ("已完成规则生成与门禁摸底", True), (",共 ", False),
+                  ("51 个检查规则项", True), ("。", False)],
+             bullet=True, size=9.5)
+
+    # 下一步计划卡
+    plan_top = prog_top + prog_h + Inches(0.16)
+    plan_h = body_bottom - plan_top
+    _, pl = add_card(s, MARGIN_L, plan_top, left_w, plan_h, "下一步计划")
+    add_para(pl, [("基于各层级 Skill 管理规范完成 ", False), ("Skill 治理", True),
+                  (",skill ", False), ("归置到位", True), ("；", False)],
+             bullet=True, size=9.5)
+    add_para(pl, [("联合 IT 装备部完成 ", False),
+                  ("Skill 门禁检测规则集定义", True), ("(", False),
+                  ("最小集 / 扩展级", True), ("),供各 LM 团队", False),
+                  ("部署 skill 门禁", True), ("。", False)],
+             bullet=True, size=9.5)
+
+    # ---- 正文右半区:预留粘贴区(约占正文一半篇幅) ----
+    add_placeholder(s, rx, body_top, right_w, body_bottom - body_top,
+                    "现状信息(粘贴区 · 预留)",
+                    "此区域预留,用于粘贴规范/门禁/试点等现状信息(截图、表格或数据)")
+
+    add_footer(s, "第 3 页 / 共 3 页", prs)
 
 
 def build():
@@ -441,6 +553,7 @@ def build():
     blank = prs.slide_layouts[6]
     build_page1(prs, blank)
     build_page2(prs, blank)
+    build_page3(prs, blank)
     out = "知识工程与质量工程建设_汇报PPT.pptx"
     prs.save(out)
     print("saved:", out)
