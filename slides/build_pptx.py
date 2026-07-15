@@ -1003,8 +1003,10 @@ txt(s, 810, by + 44, 412, 124,
 # =====================================================================
 s = base("3.1 项目知识库落地思路：目标架构",
          [R("结论：", True), R("三层混合、"), R("Markdown 为主干", True),
-          R("——宪法层（每会话必加载）+ 知识层（按需导航）+ 结构层（clangd MCP），向量检索作为痛点驱动的可选补充；对现有 CLAUDE.md / skills / specs / docs 存量资产是"),
-          R("组织化升级而非推倒重来", True), R("。")],
+          R("——知识层按"), R("五类基础知识", True, BLUE),
+          R("组织（领域 / 架构 / 决策 / 规范与约束 / 代码）：前四类沉淀为 Markdown wiki，"),
+          R("代码知识由结构层 clangd/LSP 实时派生", True),
+          R("；对存量资产是"), R("组织化升级而非推倒重来", True), R("。")],
          "第三部分 · 项目知识库落地思路", 10, sub_h=58)
 
 # main architecture (left, wide)
@@ -1027,31 +1029,35 @@ for i, (t, d) in enumerate(consts):
 arrow(s, ox + 340, oy + 44, ox + 340, oy + 58, RED)
 
 box(s, ox, oy + 152, 420, 168, BLUE_BG, BLUE, 1.5)
-txt(s, ox + 14, oy + 156, 400, 16, [R("知识层｜docs/wiki/ 按需读取（Agent 顺指针导航）", True, BLUE)], size=10.5)
-kc = box(s, ox + 14, oy + 180, 120, 32, BLUE, None, radius=0.12)
-txt(s, ox + 14, oy + 188, 120, 16, [R("index.md 总目录", True, WHITE)], size=9.5, align=PP_ALIGN.CENTER)
-kcells = [("architecture/ 模块地图", "依赖方向·数据流图", 148, 180),
-          ("domain/ 业务概念", "术语表", 288, 180),
-          ("decisions/ ADR", '"为什么"而非"是什么"', 14, 220),
-          ("conventions/ 编码规范", "错误处理·内存模型", 148, 220),
-          ("pitfalls/ 坑清单", "Agent 犯错后回写", 288, 220)]
-for (t, d, dx, dy) in kcells:
-    box(s, ox + dx, oy + dy, 126, 32, WHITE, BLUE_BD, 0.75)
-    txt(s, ox + dx, oy + dy + 2, 126, 14, [R(t)], size=8, align=PP_ALIGN.CENTER)
-    txt(s, ox + dx, oy + dy + 16, 126, 14, [R(d, False, RED if "犯错" in d else GRAY_55)], size=7, align=PP_ALIGN.CENTER)
-bspec = box(s, ox + 14, oy + 260, 400 - 28, 26, WHITE, BLUE_BD, 0.75, dash="dash")
-txt(s, ox + 14, oy + 264, 372, 16, [R("openspec/specs/ 活规格（存量资产，纳入 index 索引）", False, BLUE)], size=8.5, align=PP_ALIGN.CENTER)
+txt(s, ox + 14, oy + 156, 400, 16, [R("知识层｜docs/wiki/ 五类基础知识（按需读取）", True, BLUE)], size=10.5)
+kc = box(s, ox + 14, oy + 180, 120, 36, BLUE, None, radius=0.12)
+txt(s, ox + 14, oy + 184, 120, 16, [R("index.md 总目录", True, WHITE)], size=9, align=PP_ALIGN.CENTER)
+txt(s, ox + 14, oy + 200, 120, 14, [R("Agent 导航入口", False, WHITE)], size=7, align=PP_ALIGN.CENTER)
+kcells = [("domain/ 领域知识", "业务知识·领域术语·产品手册", 142, 180, False),
+          ("architecture/ 架构知识", "架构设计·特性设计·实现设计", 282, 180, False),
+          ("decisions/ 决策知识", "CCB·NodePC·DRB 评审决策", 14, 222, False),
+          ("conventions/ 规范与约束", "编码规范·架构约束·API约束", 142, 222, False),
+          ("代码知识 → 结构层", "符号·引用·类型层次·调用图", 282, 222, True)]
+for (t, d, dx, dy, is_code) in kcells:
+    box(s, ox + dx, oy + dy, 126, 36, WHITE, RED if is_code else BLUE_BD, 1.0 if is_code else 0.75,
+        dash="dash" if is_code else None)
+    txt(s, ox + dx, oy + dy + 3, 126, 14, [R(t, True, RED if is_code else BLACK)], size=7.5, align=PP_ALIGN.CENTER)
+    txt(s, ox + dx, oy + dy + 19, 126, 14, [R(d, False, RED if is_code else GRAY_55)], size=6.5, align=PP_ALIGN.CENTER)
+bspec = box(s, ox + 14, oy + 266, 400 - 28, 24, WHITE, BLUE_BD, 0.75, dash="dash")
+txt(s, ox + 14, oy + 269, 372, 16, [R("openspec/specs/ 活规格（存量资产，纳入 index 索引）", False, BLUE)], size=8.5, align=PP_ALIGN.CENTER)
+arrow(s, ox + 410, oy + 240, ox + 434, oy + 240, RED, 1.25, dash="dash")
 
 box(s, ox + 436, oy + 152, 232, 168, RED_BG, RED, 1.5)
-txt(s, ox + 450, oy + 156, 210, 16, [R("结构层｜MCP 工具按需调用", True, RED)], size=10.5)
-box(s, ox + 450, oy + 180, 204, 44, WHITE, RED_BD, 0.75)
-txt(s, ox + 450, oy + 184, 204, 16, [R("clangd MCP Server", True)], size=10, align=PP_ALIGN.CENTER)
-txt(s, ox + 450, oy + 202, 204, 16, [R("compile_commands.json 驱动", False, GRAY_55)], size=8, align=PP_ALIGN.CENTER)
-box(s, ox + 450, oy + 232, 98, 24, GRAY_F2, None)
-txt(s, ox + 450, oy + 236, 98, 16, [R("find_definition")], size=8, align=PP_ALIGN.CENTER)
-box(s, ox + 556, oy + 232, 98, 24, GRAY_F2, None)
-txt(s, ox + 556, oy + 236, 98, 16, [R("find_references")], size=8, align=PP_ALIGN.CENTER)
-txt(s, ox + 450, oy + 268, 204, 30, [R("编译器级精度，C/C++ 图谱最优解", False, BLUE)], size=8.5, align=PP_ALIGN.CENTER)
+txt(s, ox + 450, oy + 156, 210, 16, [R("结构层｜代码知识（MCP 调用）", True, RED)], size=10)
+box(s, ox + 450, oy + 178, 204, 40, WHITE, RED_BD, 0.75)
+txt(s, ox + 450, oy + 182, 204, 16, [R("clangd MCP Server", True)], size=9.5, align=PP_ALIGN.CENTER)
+txt(s, ox + 450, oy + 198, 204, 16, [R("compile_commands.json 驱动", False, GRAY_55)], size=8, align=PP_ALIGN.CENTER)
+code_chips = [("符号索引", 450, 226), ("跨文件引用", 556, 226),
+              ("类型层次结构", 450, 256), ("调用图", 556, 256)]
+for (t, dx, dy) in code_chips:
+    box(s, ox + dx, oy + dy, 98, 24, GRAY_F2, None)
+    txt(s, ox + dx, oy + dy + 4, 98, 16, [R(t)], size=8, align=PP_ALIGN.CENTER)
+txt(s, ox + 450, oy + 290, 204, 26, [R("编译器级精度 · 实时派生 · 不落 Markdown", False, BLUE)], size=8, align=PP_ALIGN.CENTER)
 
 box(s, ox, oy + 334, 668, 46, GRAY_FA, GRAY_99, 1.25, dash="dash")
 txt(s, ox + 14, oy + 338, 640, 16, [R("可选补充层（痛点驱动，暂缓）", True, GRAY_66)], size=10)
@@ -1072,93 +1078,104 @@ bullets(s, 774, 182, 448, 148, [
     [R("复用编译器", True), R("：结构关系交给 clangd，"), R("不自建图库", True, BLUE)],
 ], size=10, gap=3)
 
-box(s, 760, 348, 476, 138, GRAY_FA, GRAY_D9)
-card_title(s, 774, 360, "知识四缺口 → 层的映射")
-bullets(s, 774, 384, 448, 96, [
-    [R("业务背景 → "), R("知识层 domain/", True)],
-    [R("架构信息 → "), R("知识层 architecture/", True), R(" + 结构层")],
-    [R("编码约束 → "), R("宪法层 + conventions/", True)],
-    [R("代码事实 → "), R("结构层 clangd + grep", True)],
-], size=10, gap=2)
+box(s, 760, 348, 476, 152, GRAY_FA, GRAY_D9)
+card_title(s, 774, 360, "五类基础知识 → 层的映射")
+bullets(s, 774, 384, 448, 112, [
+    [R("领域知识 → "), R("知识层 domain/", True), R("（业务·术语·产品手册）")],
+    [R("架构知识 → "), R("知识层 architecture/", True), R("（架构/特性/实现设计）")],
+    [R("决策知识 → "), R("知识层 decisions/", True), R("（CCB/NodePC/DRB）")],
+    [R("规范与约束 → "), R("宪法层 + conventions/", True), R("（公司/领域规范·API约束）")],
+    [R("代码知识 → "), R("结构层 clangd/LSP", True), R("（"), R("实时派生，不写 Markdown", False, BLUE), R("）")],
+], size=9.5, gap=2)
 
-takeaway(s, 760, 498, 476, 90, "关键",
+takeaway(s, 760, 512, 476, 76, "关键",
          [R("CLAUDE.md 里必须写"), R("路由规则", True, BLUE),
           R('："符号查找用 LSP，字符串/注释检索才用 grep"——没有这条 Agent 会习惯性 grep。')],
          size=10)
 
 # =====================================================================
-# Slide 10 — implementation
+# Slide 10 — implementation (knowledge closed-loop system)
 # =====================================================================
 s = base("3.2 项目知识库落地思路：落地方案",
-         [R("结论：", True), R("三个工作包按依赖递进——"), R("存量资产组织化", True),
-          R("（纯文档工作，立即见效）→ "), R("C/C++ 结构层", True),
-          R("（工程量小、价值高）→ "), R("闭环与保鲜机制", True),
-          R('（决定知识库存亡）；"一次写对"的天花板由第三个工作包决定。')],
+         [R("结论：", True), R('落地为"'),
+          R("知识源 → 知识库 → 知识测评 → 知识消费 → 知识调试", True),
+          R('"的闭环体系，'), R("四类触发器", True, BLUE),
+          R("（新知识源 / 测评发现问题 / 消费端反馈 / 调试追踪）驱动知识库持续刷新——知识库不是一次性工程，而是"),
+          R("带反馈回路的活系统", True), R("。")],
          "第三部分 · 项目知识库落地思路", 11, sub_h=58)
 
-pkgs = [
-    ("工作包① 存量资产组织化", "纯文档工作 · 零基础设施依赖",
-     [[R("盘点 docs / specs / skills 存量，建 "), R("docs/wiki/ 目录树", True)],
-      [R("编写 "), R("index.md 总目录", True, BLUE), R("：每页一行链接 + 一句话摘要（Karpathy 模式核心件）")],
-      [R("CLAUDE.md 瘦身分层", True), R("：根文件只留跨域硬约束 + 命令 + "), R("检索协议", True, BLUE)],
-      [R("deep-wiki 类 skill "), R("自动生成初稿", True), R("，架构/约束页"), R("人工评审后", True, BLUE), R("收编")]],
-     "产出：可导航的分层 wiki + 瘦身后的宪法层"),
-    ("工作包② C/C++ 结构层", "工程量小 · 大仓价值最高",
-     [[R("生成 "), R("compile_commands.json", True, BLUE), R("（CMake 一个开关；其他构建系统用 bear / compiledb）")],
-      [R("部署 "), R("clangd MCP Server", True), R("（Chromium 级大仓开箱即用；超大仓可选 remote-index）")],
-      [R("CLAUDE.md 加"), R("路由规则", True), R("："), R('"符号查找用 LSP 工具；字符串/注释/日志检索才用 grep"', True, BLUE), R("（最易遗漏）")],
-      [R("验证：跨模块引用追踪，对比 grep 与 LSP 的上下文消耗")]],
-     "产出：编译器级符号导航，替代\"自建知识图谱\""),
-    ("工作包③ 闭环与保鲜机制", "决定知识库存亡 · 复利来源",
-     [[R("OpenSpec 联动", True), R("："), R("/opsx:archive", True, BLUE), R(" 归档时同步检查受影响 wiki 页")],
-      [R("错误回写", True), R("：Agent 犯错 → 修正 → 教训写进 pitfalls/ 或约束页（一句话即可）")],
-      [R("CI 巡检", True), R("：wiki lint（死链、目录一致性），搭 openspec validate 的车")],
-      [R("痛点观测", True), R('：记录检索失败案例；"概念找不到"高频出现时，再评估向量层')]],
-     "产出：知识随代码演进而复利，不腐化"),
+# ---- main closed-loop diagram ----
+box(s, 44, 146, 1192, 250, WHITE, GRAY_D9)
+card_title(s, 58, 158, "知识闭环体系（五个环节 + 刷新回路）", w=700)
+stages = [
+    ("① 知识源", GRAY_F2, GRAY_99, BLACK,
+     ["存量：docs / specs / skills", "评审记录（CCB/NodePC/DRB）", "新增：新特性设计文档、", "新模块设计文档 等"]),
+    ("② 知识库（建设实体）", RED_BG, RED, RED,
+     ["五类知识：领域 / 架构 / 决策", "/ 规范约束 / 代码", "Markdown wiki + index.md", "+ clangd/LSP 结构层"]),
+    ("③ 知识测评", BLUE_BG, BLUE, BLUE,
+     ["题库抽检：覆盖度·正确性", "·一致性·时效性", "wiki lint（死链/目录）", "进 CI 阻断"]),
+    ("④ 知识消费", RED_BG, RED, BLACK,
+     ["问答 / 学习 / 编码 / 设计", "Claude Code · OpenSpec", "评审辅助 · 新人上手"]),
+    ("⑤ 知识调试", BLUE_BG, BLUE, BLUE,
+     ["在编码 Agent 中统计", "wiki 被调用情况：", "热点知识 / 缺失知识 /", "零调用知识"]),
 ]
-for i, (t, d, items, out) in enumerate(pkgs):
-    x = 44 + i * 404
-    box(s, x, 150, 384, 306, WHITE, GRAY_D9)
-    rect(s, x + 4, 150, 376, 4, RED)
-    txt(s, x + 16, 164, 352, 20, [R(t, True)], size=12.5)
-    txt(s, x + 16, 188, 352, 16, [R(d, True, BLUE)], size=9.5)
-    bullets(s, x + 16, 210, 352, 190, items, size=9.5, gap=3)
-    rect(s, x + 12, 414, 360, 32, GRAY_F2)
-    txt(s, x + 22, 414, 340, 32, [R(out, True, RGBColor(0x33, 0x33, 0x33))], size=9,
-        anchor=MSO_ANCHOR.MIDDLE)
+st_w, st_gap, st_y, st_h = 214, 23, 186, 116
+for i, (t, f, lc, tc, lines) in enumerate(stages):
+    sx = 58 + i * (st_w + st_gap)
+    bw = 2.0 if i == 1 else 1.0
+    box(s, sx, st_y, st_w, st_h, f, lc, bw)
+    txt(s, sx, st_y + 6, st_w, 16, [R(t, True, tc)], size=10.5, align=PP_ALIGN.CENTER)
+    txt(s, sx + 8, st_y + 28, st_w - 16, st_h - 34,
+        [[R(ln, False, RGBColor(0x33, 0x33, 0x33), 8)] for ln in lines],
+        align=PP_ALIGN.CENTER, leading=1.3)
+    if i < 4:
+        arrow(s, sx + st_w, st_y + st_h // 2, sx + st_w + st_gap, st_y + st_h // 2, RED, 1.75)
 
-# bottom double loop
-box(s, 44, 470, 1192, 210, WHITE, GRAY_D9)
-card_title(s, 58, 482, '两个关键闭环（比任何检索基础设施都更接近"一次写对"）', w=800)
-loop_y = 512
-txt(s, 58, loop_y, 260, 18, [R("闭环 1：错误 → 教训回写", True, RED)], size=10.5)
-l1 = [("Agent 写错代码", ""), ("人工修正 / 评审", ""), ("教训写入 pitfalls/", "或对应约束页")]
-sx = 58
-for i, (t, d) in enumerate(l1):
-    wb = 150
-    box(s, sx, loop_y + 26, wb, 46, RED_BG, RED, 1.0)
-    txt(s, sx, loop_y + 30 if d else loop_y + 38, wb, 18, [R(t)], size=9.5, align=PP_ALIGN.CENTER)
-    if d:
-        txt(s, sx, loop_y + 48, wb, 14, [R(d, False, GRAY_55)], size=8, align=PP_ALIGN.CENTER)
-    if i < 2:
-        arrow(s, sx + wb, loop_y + 49, sx + wb + 20, loop_y + 49, RED, 1.5)
-    sx += wb + 20
-arrow(s, 435, loop_y + 74, 140, loop_y + 100, RED, 1.25, dash="dash")
-txt(s, 190, loop_y + 96, 220, 16, [R("下次会话不再犯", False, RED)], size=8.5)
+# feedback bus: drops from stages 1/3/4/5 down to a bus, back up into stage 2
+bus_y = 336
+c1 = 58 + 0 * 237 + 107
+c2 = 58 + 1 * 237 + 107
+c3 = 58 + 2 * 237 + 107
+c4 = 58 + 3 * 237 + 107
+c5 = 58 + 4 * 237 + 107
+for cx0, lbl in [(c1, "新源入库"), (c3, "发现问题/不完善"), (c4, "消费端反馈"), (c5, "热点/缺失追踪")]:
+    line(s, cx0, st_y + st_h, cx0, bus_y, RED, 1.1, dash="dash")
+    txt(s, cx0 + 5, st_y + st_h + 8, 120, 14, [R(lbl, False, RED)], size=7.5)
+line(s, c1, bus_y, c5, bus_y, RED, 1.5, dash="dash")
+arrow(s, c2, bus_y, c2, st_y + st_h + 2, RED, 2.0)
+txt(s, c2 - 90, bus_y + 8, 300, 16, [R("触发知识库刷新（四类触发器）", True, RED)], size=9.5)
 
-txt(s, 660, loop_y, 280, 18, [R("闭环 2：变更 → 知识同步", True, BLUE)], size=10.5)
-l2 = [("代码变更合入", "spec delta 归档"), ("/opsx:archive 钩子", "检查受影响 wiki 页"), ("wiki 更新 + CI lint", "死链 / 一致性检查")]
-sx = 660
-for i, (t, d) in enumerate(l2):
-    wb = 168
-    box(s, sx, loop_y + 26, wb, 46, BLUE_BG, BLUE, 1.0)
-    txt(s, sx, loop_y + 30, wb, 18, [R(t)], size=9.5, align=PP_ALIGN.CENTER)
-    txt(s, sx, loop_y + 48, wb, 14, [R(d, False, GRAY_55)], size=8, align=PP_ALIGN.CENTER)
-    if i < 2:
-        arrow(s, sx + wb, loop_y + 49, sx + wb + 22, loop_y + 49, BLUE, 1.5)
-    sx += wb + 22
-arrow(s, 1090, loop_y + 74, 760, loop_y + 100, BLUE, 1.25, dash="dash")
-txt(s, 850, loop_y + 96, 240, 16, [R("知识与代码永不漂移", False, BLUE)], size=8.5)
+# ---- four trigger cards ----
+trig_y = 410
+trigs = [
+    ("触发器① 新知识源", "①→②",
+     [[R("新特性设计文档、新模块设计文档", True), R("等新知识源入库")],
+      [R("与 OpenSpec 联动："), R("/opsx:archive", True, BLUE), R(" 归档即触发对应 wiki 页"), R("增量刷新", True)]]),
+    ("触发器② 知识测评", "③→②",
+     [[R("题库抽检识别"), R("错误 / 不完善 / 过时", True), R("知识 → 定向刷新")],
+      [R("wiki lint（死链、目录一致性）进 CI，失败即阻断合入")]]),
+    ("触发器③ 消费端反馈", "④→②",
+     [[R("问答 / 编码 / 设计中发现知识错误或不可用 → "), R("轻量反馈通道", True), R("（一键提单）")],
+      [R("修正后"), R("回写知识库", True), R("并记录案例，沉淀为测评题")]]),
+    ("触发器④ 知识调试追踪", "⑤→②",
+     [[R("在 Claude Code 等 Agent 中"), R("统计 wiki 调用", True, BLUE), R("：")],
+      [R("热点知识", True), R(" → 细化深挖；"), R("缺失知识", True), R(" → 补齐；"), R("零调用", True), R(" → 审视归档瘦身")]]),
+]
+for i, (t, tag, items) in enumerate(trigs):
+    x = 44 + i * 302
+    box(s, x, trig_y, 286, 158, WHITE, GRAY_D9)
+    rect(s, x + 4, trig_y, 278, 4, RED)
+    txt(s, x + 14, trig_y + 12, 200, 18, [R(t, True)], size=10.5, wrap=False)
+    tagb = box(s, x + 232, trig_y + 12, 42, 18, RED_BG, RED, 0.75, radius=0.3)
+    txt(s, x + 232, trig_y + 14, 42, 14, [R(tag, True, RED)], size=8, align=PP_ALIGN.CENTER)
+    bullets(s, x + 14, trig_y + 38, 260, 112, items, size=8.5, gap=3)
+
+# ---- bottom takeaway ----
+takeaway(s, 44, 582, 1192, 60, "运营心法",
+         [R("知识库像代码一样运营："), R("四类触发器 = 持续集成", True, BLUE),
+          R("；"), R("知识测评 = 单元测试", True, BLUE),
+          R("；"), R("知识调试 = 生产环境监控", True, BLUE),
+          R('——热点知识持续深挖、缺失知识及时补齐、零调用知识定期瘦身，知识库才能不腐化。')], size=11)
 
 # =====================================================================
 # Slide 11 — roadmap
@@ -1174,7 +1191,7 @@ ty = 190
 line(s, 74, ty, 1206, ty, GRAY_D9, 3.0)
 tl = [("阶段一 · 组织化", "试点仓：wiki + 宪法层瘦身", 130, RED, "1"),
       ("阶段二 · 结构层", "clangd MCP + 路由规则", 440, RED, "2"),
-      ("阶段三 · 闭环保鲜", "双闭环 + CI 巡检 + 横向复制", 750, RED, "3"),
+      ("阶段三 · 闭环保鲜", "知识闭环 + CI 巡检 + 横向复制", 750, RED, "3"),
       ("可选 · 向量层", "仅当痛点数据支持时启动", 1060, BLUE, "+")]
 for i, (t, d, cx, c, num) in enumerate(tl):
     ov = oval(s, cx - 13, ty - 13, 26, 26, c if c == RED else WHITE, BLUE if c == BLUE else None, 2.0)
@@ -1201,7 +1218,7 @@ phases = [
       [R("超大仓评估 clangd "), R("remote-index", True)]],
      "验收：跨模块引用追踪任务中，Agent 默认走 LSP；符号误定位显著减少"),
     ("阶段三：闭环保鲜 + 复制",
-     [[R("接通"), R("双闭环", True), R("：错误回写 pitfalls/；/opsx:archive 联动 wiki 更新")],
+     [[R("接通"), R("知识闭环", True), R("：四类触发器（新源/测评/反馈/调试）驱动刷新")],
       [R("CI 加 wiki lint（死链 / 目录一致性）")],
       [R("试点仓模式"), R("模板化", True), R("，横向复制到其余代码仓")]],
      "验收：连续多个迭代 wiki 与代码不漂移；同类错误不复发"),
