@@ -217,9 +217,11 @@ def takeaway(slide, x, y, w, h, label, runs, size=11):
     txt(slide, x + lw_px + 22, y + 8, w - lw_px - 36, h - 16, [runs], size=size, leading=1.3)
 
 
+TOTAL_PAGES = 12
+
 def footer(slide, part, page):
     txt(slide, 44, 694, 700, 18, [R(part, True, RED)], size=9)
-    txt(slide, 1100, 694, 136, 18, [R("%d / 11" % page, False, GRAY_99)], size=9,
+    txt(slide, 1100, 694, 136, 18, [R("%d / %d" % (page, TOTAL_PAGES), False, GRAY_99)], size=9,
         align=PP_ALIGN.RIGHT)
 
 
@@ -508,13 +510,132 @@ arrow(s, ox + 220, oy + 294, ox + 175, oy + 320, RED)
 arrow(s, ox + 370, oy + 294, ox + 415, oy + 320, RED)
 
 # =====================================================================
-# Slide 5 — LLM Wiki
+# Slide 5 — cases consolidated (1.4)
+# =====================================================================
+s = base("1.4 案例小结：三大头部案例关键信息整合（一页总览）",
+         [R("结论：", True), R("三条头部路线 = 三种"), R("检索主干", True),
+          R('的选择；共性是都配了"预消化知识层"与"现场验证"，差异只在'),
+          R("以谁为主干", True), R('——这直接支撑了我们"'),
+          R("Markdown 主干 + LSP 骨架 + 向量补充", True, BLUE), R('"的选型。')],
+         "第一部分 · 业界知识库应用洞察", 5, sub_h=58)
+
+GRAY33 = RGBColor(0x33, 0x33, 0x33)
+
+def mini_box(x, y, w, h, t, d, f, lc, tc, tsz=8.5, dsz=7, dc=None):
+    box(s, x, y, w, h, f, lc, 0.9)
+    if d:
+        txt(s, x + 1, y + 3, w - 2, 14, [R(t, True, tc)], size=tsz, align=PP_ALIGN.CENTER, wrap=False)
+        txt(s, x + 1, y + h - 17, w - 2, 14, [R(d, False, dc or GRAY_55)], size=dsz, align=PP_ALIGN.CENTER, wrap=False)
+    else:
+        txt(s, x + 1, y, w - 2, h, [R(t, True, tc)], size=tsz, align=PP_ALIGN.CENTER,
+            anchor=MSO_ANCHOR.MIDDLE)
+
+def col_head(x, name, route):
+    box(s, x, 146, 384, 34, RED_BG, RED, 1.25)
+    txt(s, x + 12, 146, 186, 34, [R(name, True, RED)], size=11.5,
+        anchor=MSO_ANCHOR.MIDDLE)
+    txt(s, x + 198, 146, 176, 34, [R(route, True, BLUE)], size=8,
+        align=PP_ALIGN.RIGHT, anchor=MSO_ANCHOR.MIDDLE)
+
+# ---- column 1: Claude Code ----
+cx = 44
+col_head(cx, "案例一 Claude Code", "Agentic Search 主干")
+mini_box(cx, 190, 118, 38, "分层 CLAUDE.md", "会话自动加载", RED_BG, RED, RED)
+mini_box(cx + 132, 190, 118, 38, "Agent 推理循环", "搜索→阅读→编写", RED, None, WHITE, dc=WHITE)
+mini_box(cx + 266, 190, 118, 38, "grep/glob/read", "现场检索·无索引", BLUE_BG, BLUE, BLUE)
+arrow(s, cx + 118, 209, cx + 130, 209, RED, 1.25)
+arrow(s, cx + 250, 209, cx + 264, 209, BLUE, 1.25)
+mini_box(cx + 72, 246, 240, 34, "代码仓（实时文件系统，无索引漂移）", "", GRAY_F2, GRAY_99, BLACK, 8.5)
+arrow(s, cx + 325, 228, cx + 285, 244, BLUE, 1.25)
+arrow(s, cx + 72, 262, cx + 30, 262, RED, 1.0, dash="dash")
+arrow(s, cx + 30, 262, cx + 30, 230, RED, 1.0, dash="dash")
+txt(s, cx - 2, 284, 260, 14, [R("犯错 → 教训手写回 CLAUDE.md（拒绝向量召回）", False, RED)], size=7.5)
+
+bullets(s, cx + 6, 306, 372, 190, [
+    [R("分层加载", True), R("：根文件 <150 行、命令优先，模块子目录就近加载（OpenAI 主仓 "), R("88 个 AGENTS.md", False, BLUE), R("）")],
+    [R("放弃向量 RAG 四理由", True), R("：精确（grep 无模糊误报）· 简单（无索引维护）· 新鲜（直查文件）· 隐私（不出本机）")],
+    [R("跨会话记忆 = "), R("手写 Markdown 回写", True)],
+    [R("官方大仓建议：补 "), R("LSP 符号级导航", True, BLUE), R("（最高价值投资）")],
+], size=9, gap=3)
+
+box(s, cx, 516, 384, 66, RED_BG, RED, 1.0)
+txt(s, cx + 10, 522, 364, 54,
+    [R("启示：", True, RED), R("知识做成"), R("结构化 Markdown 文件", True, BLUE),
+     R("即与 Agent 零摩擦对接；记忆与约束都应可评审、可 diff。")], size=9, leading=1.3)
+
+# ---- column 2: Cursor ----
+cx = 448
+col_head(cx, "案例二 Cursor", "向量索引主干")
+w4 = 90
+labels = [("代码仓", "每次保存", GRAY_F2, GRAY_99, BLACK),
+          ("Merkle 增量", "7.87s→525ms", RED_BG, RED, RED),
+          ("AST+专训嵌入", "tree-sitter", RED_BG, RED, RED),
+          ("Turbopuffer", "向量+全文", BLUE_BG, BLUE, BLUE)]
+for i, (t, d, f, lc, tc) in enumerate(labels):
+    mini_box(cx + i * 98, 190, w4, 38, t, d, f, lc, tc, 8, 6.5)
+    if i < 3:
+        arrow(s, cx + i * 98 + w4, 209, cx + (i + 1) * 98, 209, RED, 1.1)
+mini_box(cx, 246, 106, 34, "提问(按意思)", "", GRAY_F2, GRAY_99, BLACK, 8)
+mini_box(cx + 139, 246, 106, 34, "语义检索 Top-N", "", BLUE_BG, BLUE, BLUE, 8)
+mini_box(cx + 278, 246, 106, 34, "Agentic 验证后写码", "", RED_BG, RED, BLACK, 8)
+arrow(s, cx + 106, 263, cx + 137, 263, BLUE, 1.1)
+arrow(s, cx + 245, 263, cx + 276, 263, RED, 1.1)
+line(s, cx + 337, 228, cx + 210, 244, BLUE, 1.0, dash="dash")
+txt(s, cx + 4, 284, 372, 14, [R("构建期持续增量索引（上排）+ 查询期语义召回再验证（下排）", False, GRAY_55)], size=7.5)
+
+bullets(s, cx + 6, 306, 372, 190, [
+    [R("价值窗口", True), R("：不知道符号名按\"意思\"找、大仓冷启动；答题准确率 "), R("+12.5%（6.5%~23.5%）", True, BLUE)],
+    [R("隐私设计：只存"), R("脱敏路径 + 向量", True), R("，源码不出本机")],
+    [R("边界", True), R("：精确符号查询不敌 grep/LSP（getUserById ≈ getUserByEmail）；"), R("索引保鲜", True), R("是持续负担")],
+    [R("同路线：Copilot Blackbird（115TB / 530 亿文件）、Windsurf、Devin")],
+], size=9, gap=3)
+
+box(s, cx, 516, 384, 66, RED_BG, RED, 1.0)
+txt(s, cx + 10, 522, 364, 54,
+    [R("启示：", True, RED), R("向量检索定位为"), R("概念检索与冷启动的补充", True, BLUE),
+     R("，且必须与 agentic 工具叠加——不是\"一次检索定胜负\"。")], size=9, leading=1.3)
+
+# ---- column 3: DeepWiki ----
+cx = 852
+col_head(cx, "案例三 DeepWiki", "自动生成 Wiki（预消化层）")
+mini_box(cx, 190, 100, 38, "代码仓", "结构·依赖·文档", GRAY_F2, GRAY_99, BLACK, 8)
+mini_box(cx + 114, 190, 130, 38, "LLM 生成管线", "扫描·规划·生成", RED_BG, RED, RED, 8)
+mini_box(cx + 258, 190, 126, 38, "Wiki 制品", "架构图+file:line", RED_BG, RED, RED, 8)
+arrow(s, cx + 100, 209, cx + 112, 209, RED, 1.1)
+arrow(s, cx + 244, 209, cx + 256, 209, RED, 1.1)
+mini_box(cx, 246, 180, 34, "PR 合并 → Wiki 自动更新", "", BLUE_BG, BLUE, BLUE, 8)
+mini_box(cx + 204, 246, 180, 34, "Agent 先读 Wiki→再定位源码", "", GRAY_F2, GRAY_99, BLACK, 8)
+line(s, cx + 90, 244, cx + 150, 230, BLUE, 1.0, dash="dash")
+arrow(s, cx + 321, 228, cx + 296, 244, RED, 1.1)
+txt(s, cx + 4, 284, 372, 14, [R("人和 Agent 共用同一份，可评审、可 diff、可追溯", False, GRAY_55)], size=7.5)
+
+bullets(s, cx + 6, 306, 372, 190, [
+    [R("自动生成"), R("架构图（Mermaid）、组件表、时序图", True), R("；论断带 "), R("file:line 锚点", True, BLUE), R("可溯源")],
+    [R("PR 合并自动更新；"), R(".devin/wiki.json", True, BLUE), R(" 人工\"导演\"页面结构与重点")],
+    [R("生成 "), R("llms.txt / AGENTS.md", True), R(" 作为 Agent 地图入口")],
+    [R("同路线：Google CodeWiki、Greptile、microsoft deep-wiki skill（可自部署）")],
+], size=9, gap=3)
+
+box(s, cx, 516, 384, 66, RED_BG, RED, 1.0)
+txt(s, cx + 10, 522, 364, 54,
+    [R("启示：", True, RED), R('"预消化"知识层的工业化验证；实证结论是'),
+     R("自动生成打底、人工策展定稿", True, BLUE), R("。")], size=9, leading=1.3)
+
+# ---- bottom common takeaway ----
+takeaway(s, 44, 596, 1192, 62, "共同启示",
+         [R('三家都是"主干 + 补充"的组合拳：'),
+          R("策展知识层（Markdown）+ 现场检索（agentic）+ 语义/结构索引按需叠加", True, BLUE),
+          R("；且都把"), R("知识与代码同步保鲜", True),
+          R("当作核心工程问题——没有任何头部工具用单一技术路线。")], size=11)
+
+# =====================================================================
+# Slide 6 — LLM Wiki
 # =====================================================================
 s = base("2.1 方法一：LLM Wiki（Obsidian / Markdown 知识库）",
          [R("一句话原理：", True), R('知识写成互相链接的 Markdown + 一个目录页，Agent 像人查"'),
           R("带目录的手册", True), R('"——先读目录、再读相关页；知识'), R("编译一次、持续保鲜", True),
           R("，而非每次查询临时检索合成。（Karpathy 2026.04 规范化，单 gist 5000+ star）")],
-         "第二部分 · 业界知识库方法论及技术洞察", 5)
+         "第二部分 · 业界知识库方法论及技术洞察", 6)
 
 # left diagram
 box(s, 44, 140, 610, 540, WHITE, GRAY_D9)
@@ -597,7 +718,7 @@ s = base("2.2 方法二：RAG 知识图谱（GraphRAG）",
           R('"，查询时不是"找相似文本"而是"'), R("顺着边走", True),
           R('"（多跳遍历返回连通子图）。代码场景必须区分两个亚种：'),
           R("确定性代码结构图谱 vs LLM 抽取的语义图谱", True), R("，成本与可靠性差别巨大。")],
-         "第二部分 · 业界知识库方法论及技术洞察", 6, sub_h=58)
+         "第二部分 · 业界知识库方法论及技术洞察", 7, sub_h=58)
 
 # left diagram
 box(s, 44, 146, 610, 534, WHITE, GRAY_D9)
@@ -687,7 +808,7 @@ s = base("2.3 方法三：向量数据库（Embedding RAG）",
          [R("一句话原理：", True), R('文档/代码切块 → 每块转成高维向量（"'), R("语义指纹", True),
           R('"）入库；查询也转成向量，找"指纹最接近"的块。本质是"'), R("按意思找", True),
           R('"而非"按字面找"——搜"鉴权"能命中只写了 login validation 的代码。')],
-         "第二部分 · 业界知识库方法论及技术洞察", 7, sub_h=58)
+         "第二部分 · 业界知识库方法论及技术洞察", 8, sub_h=58)
 
 box(s, 44, 146, 610, 534, WHITE, GRAY_D9)
 card_title(s, 58, 158, "原理流程示意")
@@ -784,7 +905,7 @@ s = base("2.4 三类方案横向对比：回答不同的问题，不构成竞争
           R('"，向量管"'), R("模糊找", True), R('"；此外还有两个隐藏成员——'),
           R("Agentic Search（现场检索主干）", True), R(" 与 "), R("LSP/编译器符号索引", True),
           R("（C/C++ 结构层最优解），完整拼图是五者分层组合。")],
-         "第二部分 · 业界知识库方法论及技术洞察", 8, sub_h=58)
+         "第二部分 · 业界知识库方法论及技术洞察", 9, sub_h=58)
 
 rows = [
     ["维度", "LLM Wiki\nMarkdown 知识库", "RAG 知识图谱\n节点+边+遍历", "向量数据库\nEmbedding 近邻", "代码图谱 / LSP\nclangd·Kythe·Glean", "Agentic Search\ngrep/read 现场检索"],
@@ -884,7 +1005,7 @@ s = base("3.1 项目知识库落地思路：目标架构",
          [R("结论：", True), R("三层混合、"), R("Markdown 为主干", True),
           R("——宪法层（每会话必加载）+ 知识层（按需导航）+ 结构层（clangd MCP），向量检索作为痛点驱动的可选补充；对现有 CLAUDE.md / skills / specs / docs 存量资产是"),
           R("组织化升级而非推倒重来", True), R("。")],
-         "第三部分 · 项目知识库落地思路", 9, sub_h=58)
+         "第三部分 · 项目知识库落地思路", 10, sub_h=58)
 
 # main architecture (left, wide)
 box(s, 44, 146, 700, 534, WHITE, GRAY_D9)
@@ -973,7 +1094,7 @@ s = base("3.2 项目知识库落地思路：落地方案",
           R("（纯文档工作，立即见效）→ "), R("C/C++ 结构层", True),
           R("（工程量小、价值高）→ "), R("闭环与保鲜机制", True),
           R('（决定知识库存亡）；"一次写对"的天花板由第三个工作包决定。')],
-         "第三部分 · 项目知识库落地思路", 10, sub_h=58)
+         "第三部分 · 项目知识库落地思路", 11, sub_h=58)
 
 pkgs = [
     ("工作包① 存量资产组织化", "纯文档工作 · 零基础设施依赖",
@@ -1046,7 +1167,7 @@ s = base("3.3 项目知识库落地思路：落地节奏",
          [R("结论：", True), R("按"), R("依赖顺序", True), R("分三阶段推进，每阶段有明确"),
           R("验收标准", True), R("；先在 1 个代表性代码仓试点、再横向复制到其余仓；向量层始终是"),
           R("痛点驱动的可选项", True), R("，不进入默认节奏。")],
-         "第三部分 · 项目知识库落地思路", 11, sub_h=58)
+         "第三部分 · 项目知识库落地思路", 12, sub_h=58)
 
 # timeline
 ty = 190
