@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="slide">
+  <h1 class="title">1.1 案例一：Claude Code（Anthropic）—— Agentic Search + 分层 Markdown</h1>
+  <div class="subtitle"><b>结论：</b>头部 Agent 的检索主干是"<b>不建索引、现场检索</b>"；跨会话知识用<b>手写分层 Markdown（CLAUDE.md）</b>承载——知识库做成文件，与 Agent 零摩擦对接。</div>
+
+  <div class="body-wrap">
+    <!-- 左：要点 -->
+    <div style="flex:1.05;display:flex;flex-direction:column;gap:10px;">
+      <div class="card gray">
+        <div class="card-title"><span class="dot"></span>知识管理方式</div>
+        <ul class="body-list tight">
+          <li><b>分层 CLAUDE.md</b>：根文件管全局（&lt;150 行，命令优先），各模块子目录放局部约定，自动加载"离被编辑文件最近的一份"（OpenAI 主仓有 <span class="em">88 个 AGENTS.md</span>）</li>
+          <li><b>Agentic Search</b>：Agent 反复调用 <span class="em">grep / glob / read</span> 自主缩小范围，不预建任何索引</li>
+          <li><b>记忆即文件</b>：跨会话记忆 = 手写 Markdown，拒绝向量召回</li>
+        </ul>
+      </div>
+      <div class="card gray">
+        <div class="card-title"><span class="dot"></span>为何放弃向量 RAG（作者 Boris Cherny 自述）</div>
+        <ul class="body-list tight">
+          <li class="small"><b>精确</b>：grep 精确匹配，embedding 引入模糊误报</li>
+          <li class="small"><b>简单</b>：无索引可建、可维护、可过期</li>
+          <li class="small"><b>新鲜</b>：直查文件系统，索引不会"说谎"</li>
+          <li class="small"><b>隐私</b>：代码不出本机做 embedding</li>
+        </ul>
+      </div>
+      <div class="takeaway">
+        <div class="tk-label">启示</div>
+        <div>知识库做成<span class="em">结构化 Markdown 文件</span>就是对 Claude Code 最原生的接入方式；大仓库补充 <span class="em">LSP 符号级导航</span>（官方列为最高价值投资）。</div>
+      </div>
+    </div>
+
+    <!-- 右：示意图 -->
+    <div style="flex:1;">
+      <div class="card" style="height:100%;">
+        <div class="card-title"><span class="dot"></span>工作机制示意</div>
+        <svg width="100%" height="440" viewBox="0 0 560 440" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+          <defs>
+            <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#C00000"/></marker>
+            <marker id="ab" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#0000FF"/></marker>
+          </defs>
+          <!-- Agent -->
+          <rect x="190" y="12" width="180" height="52" rx="8" fill="#C00000"/>
+          <text x="280" y="34" fill="#fff" font-size="17" font-weight="bold" text-anchor="middle">Claude Code Agent</text>
+          <text x="280" y="53" fill="#fff" font-size="12" text-anchor="middle">推理循环：搜索 → 阅读 → 编写</text>
+
+          <!-- 会话启动自动加载 -->
+          <line x1="150" y1="110" x2="222" y2="66" stroke="#C00000" stroke-width="2" marker-end="url(#ar)"/>
+          <text x="118" y="92" font-size="12" fill="#C00000">会话启动自动加载</text>
+
+          <!-- 分层CLAUDE.md -->
+          <rect x="24" y="112" width="252" height="128" rx="8" fill="#FFF7F7" stroke="#C00000" stroke-width="1.5"/>
+          <text x="150" y="134" font-size="14" font-weight="bold" text-anchor="middle" fill="#C00000">分层 CLAUDE.md（宪法层）</text>
+          <rect x="44" y="146" width="212" height="24" rx="4" fill="#fff" stroke="#D9A0A0"/>
+          <text x="150" y="163" font-size="12" text-anchor="middle">/CLAUDE.md　全局约束+命令</text>
+          <rect x="66" y="176" width="190" height="24" rx="4" fill="#fff" stroke="#D9A0A0"/>
+          <text x="161" y="193" font-size="12" text-anchor="middle">/src/net/CLAUDE.md　模块约定</text>
+          <rect x="88" y="206" width="168" height="24" rx="4" fill="#fff" stroke="#D9A0A0"/>
+          <text x="172" y="223" font-size="12" text-anchor="middle">/src/db/CLAUDE.md　……</text>
+
+          <!-- 按需现场检索 -->
+          <line x1="410" y1="110" x2="340" y2="66" stroke="#0000FF" stroke-width="2" marker-end="url(#ab)"/>
+          <text x="392" y="92" font-size="12" fill="#0000FF">按需现场检索(无索引)</text>
+
+          <!-- Agentic search tools -->
+          <rect x="300" y="112" width="236" height="128" rx="8" fill="#F0F0FF" stroke="#0000FF" stroke-width="1.5"/>
+          <text x="418" y="134" font-size="14" font-weight="bold" text-anchor="middle" fill="#0000FF">Agentic Search 工具</text>
+          <rect x="318" y="146" width="60" height="26" rx="4" fill="#fff" stroke="#9999FF"/><text x="348" y="164" font-size="12" text-anchor="middle">grep</text>
+          <rect x="388" y="146" width="60" height="26" rx="4" fill="#fff" stroke="#9999FF"/><text x="418" y="164" font-size="12" text-anchor="middle">glob</text>
+          <rect x="458" y="146" width="60" height="26" rx="4" fill="#fff" stroke="#9999FF"/><text x="488" y="164" font-size="12" text-anchor="middle">read</text>
+          <rect x="318" y="180" width="200" height="26" rx="4" fill="#fff" stroke="#9999FF"/><text x="418" y="198" font-size="12" text-anchor="middle">LSP / MCP 工具（大仓库扩展）</text>
+          <text x="418" y="230" font-size="11.5" fill="#555" text-anchor="middle">反复调用、自主缩小范围</text>
+
+          <!-- 代码仓 -->
+          <rect x="130" y="286" width="300" height="58" rx="8" fill="#F2F2F2" stroke="#999"/>
+          <text x="280" y="310" font-size="14" font-weight="bold" text-anchor="middle">代码仓（实时文件系统）</text>
+          <text x="280" y="330" font-size="12" text-anchor="middle" fill="#555">源码 · docs/ · specs/ —— 永远最新，无索引漂移</text>
+          <line x1="150" y1="240" x2="220" y2="284" stroke="#C00000" stroke-width="1.6" marker-end="url(#ar)"/>
+          <line x1="418" y1="240" x2="348" y2="284" stroke="#0000FF" stroke-width="1.6" marker-end="url(#ab)"/>
+
+          <!-- 记忆回写 -->
+          <rect x="130" y="372" width="300" height="50" rx="8" fill="#FFF7F7" stroke="#C00000" stroke-width="1.4"/>
+          <text x="280" y="393" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#C00000">跨会话记忆 = 手写 Markdown 回写</text>
+          <text x="280" y="412" font-size="12" text-anchor="middle" fill="#555">犯错 → 教训写回 CLAUDE.md（无损、精确、可评审）</text>
+          <line x1="280" y1="344" x2="280" y2="370" stroke="#C00000" stroke-width="1.6" marker-end="url(#ar)"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"><span class="part-tag">第一部分 · 业界知识库应用洞察</span><span>2 / 11</span></div>
+</div>
+</body></html>

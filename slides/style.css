@@ -1,0 +1,105 @@
+/* ===== 幻灯片通用样式 =====
+   页面规格: 1280x720 (16:9), 1pt = 1.333px
+   大标题 24pt=32px #C00000 加粗; 副标题 14pt=19px 黑字 #F2F2F2底框;
+   正文 10~12pt = 13~16px; 强调 #0000FF */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { background: #ffffff; }
+body {
+  font-family: "Microsoft YaHei", "Noto Sans CJK SC", "WenQuanYi Micro Hei", sans-serif;
+  color: #000000;
+}
+.slide {
+  width: 1280px; height: 720px;
+  background: #ffffff;
+  padding: 30px 44px 26px 44px;
+  position: relative;
+  overflow: hidden;
+}
+h1.title {
+  color: #C00000;
+  font-size: 32px;      /* 24pt */
+  font-weight: 700;
+  text-align: left;
+  line-height: 1.25;
+  margin-bottom: 10px;
+}
+.subtitle {
+  background: #F2F2F2;
+  color: #000000;
+  font-size: 19px;      /* 14pt */
+  line-height: 1.45;
+  padding: 9px 14px;
+  border-left: 5px solid #C00000;
+  margin-bottom: 14px;
+}
+.subtitle b { font-weight: 700; }
+.em { color: #0000FF; font-weight: 600; }
+.body-wrap { display: flex; gap: 18px; }
+
+/* 卡片与小标题 */
+.card {
+  border: 1px solid #D9D9D9;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #ffffff;
+}
+.card.gray { background: #FAFAFA; }
+.card-title {
+  font-size: 16px; font-weight: 700; color: #000;
+  display: flex; align-items: center; gap: 7px;
+  margin-bottom: 6px;
+}
+.card-title .dot { width: 8px; height: 8px; border-radius: 2px; background: #C00000; flex: none; }
+ul.body-list { list-style: none; }
+ul.body-list li {
+  font-size: 15px;       /* ~11pt */
+  line-height: 1.5;
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 5px;
+}
+ul.body-list li::before {
+  content: ""; position: absolute; left: 2px; top: 8px;
+  width: 6px; height: 6px; background: #C00000; border-radius: 50%;
+}
+ul.body-list li.small { font-size: 13.5px; }
+ul.body-list.tight li { margin-bottom: 3px; }
+
+/* 结论/启示条 */
+.takeaway {
+  border: 1.5px solid #C00000; border-radius: 8px;
+  background: #FFF7F7;
+  padding: 8px 14px;
+  font-size: 15px; line-height: 1.5;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.takeaway .tk-label {
+  flex: none; color: #ffffff; background: #C00000;
+  font-size: 13px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-top: 2px;
+}
+
+/* 表格 */
+table.cmp { border-collapse: collapse; width: 100%; }
+table.cmp th, table.cmp td {
+  border: 1px solid #D9D9D9; padding: 6px 9px;
+  font-size: 14px; line-height: 1.35; text-align: left; vertical-align: top;
+}
+table.cmp th { background: #F2F2F2; font-weight: 700; }
+table.cmp td.hd { background: #FAFAFA; font-weight: 700; white-space: nowrap; }
+
+/* 页脚 */
+.footer {
+  position: absolute; left: 44px; right: 44px; bottom: 10px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; color: #888888;
+}
+.footer .part-tag { color: #C00000; font-weight: 600; }
+
+/* 徽标小图标(svg通用) */
+.ic { flex: none; }
+.chip {
+  display: inline-block; font-size: 12.5px; color: #333;
+  background: #F2F2F2; border: 1px solid #D9D9D9; border-radius: 10px;
+  padding: 1px 9px; margin: 2px 3px 2px 0;
+}
+.chip.blue { color: #0000FF; border-color: #B8B8FF; background: #F0F0FF; }

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="slide">
+  <h1 class="title">2.3 方法三：向量数据库（Embedding RAG）</h1>
+  <div class="subtitle"><b>一句话原理：</b>文档/代码切块 → 每块转成高维向量（"<b>语义指纹</b>"）入库；查询也转成向量，找"指纹最接近"的块。本质是"<b>按意思找</b>"而非"按字面找"——搜"鉴权"能命中只写了 login validation 的代码。</div>
+
+  <div class="body-wrap">
+    <!-- 左：流程图 -->
+    <div style="flex:1.05;">
+      <div class="card" style="height:100%;">
+        <div class="card-title"><span class="dot"></span>原理流程示意</div>
+        <svg width="100%" height="420" viewBox="0 0 580 420" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+          <defs>
+            <marker id="ar7" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#C00000"/></marker>
+            <marker id="ab7" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#0000FF"/></marker>
+          </defs>
+          <!-- 索引期 -->
+          <text x="20" y="24" font-size="13.5" font-weight="bold" fill="#C00000">① 索引期（离线，需持续保鲜）</text>
+          <rect x="20" y="36" width="118" height="54" rx="8" fill="#F2F2F2" stroke="#999"/>
+          <text x="79" y="59" font-size="12.5" text-anchor="middle" font-weight="bold">文档 / 代码</text>
+          <text x="79" y="78" font-size="10.5" text-anchor="middle" fill="#555">docs·specs·源码</text>
+          <rect x="168" y="36" width="108" height="54" rx="8" fill="#FFF7F7" stroke="#C00000"/>
+          <text x="222" y="59" font-size="12.5" text-anchor="middle" font-weight="bold">切块 Chunk</text>
+          <text x="222" y="78" font-size="10.5" text-anchor="middle" fill="#555">按段落/AST切</text>
+          <rect x="306" y="36" width="120" height="54" rx="8" fill="#FFF7F7" stroke="#C00000"/>
+          <text x="366" y="59" font-size="12.5" text-anchor="middle" font-weight="bold">Embedding</text>
+          <text x="366" y="78" font-size="10.5" text-anchor="middle" fill="#555">块 → 高维向量</text>
+          <rect x="456" y="36" width="108" height="54" rx="8" fill="#F0F0FF" stroke="#0000FF" stroke-width="1.5"/>
+          <text x="510" y="59" font-size="12.5" text-anchor="middle" font-weight="bold" fill="#0000FF">向量库</text>
+          <text x="510" y="78" font-size="10.5" text-anchor="middle" fill="#555">HNSW 近邻索引</text>
+          <line x1="138" y1="63" x2="166" y2="63" stroke="#C00000" stroke-width="2" marker-end="url(#ar7)"/>
+          <line x1="276" y1="63" x2="304" y2="63" stroke="#C00000" stroke-width="2" marker-end="url(#ar7)"/>
+          <line x1="426" y1="63" x2="454" y2="63" stroke="#C00000" stroke-width="2" marker-end="url(#ar7)"/>
+
+          <!-- 查询期 -->
+          <text x="20" y="134" font-size="13.5" font-weight="bold" fill="#0000FF">② 查询期（在线）</text>
+          <rect x="20" y="146" width="130" height="54" rx="8" fill="#F2F2F2" stroke="#999"/>
+          <text x="85" y="169" font-size="12.5" text-anchor="middle" font-weight="bold">问题</text>
+          <text x="85" y="188" font-size="10.5" text-anchor="middle" fill="#555">"哪里处理鉴权？"</text>
+          <rect x="180" y="146" width="120" height="54" rx="8" fill="#F0F0FF" stroke="#0000FF"/>
+          <text x="240" y="169" font-size="12.5" text-anchor="middle" font-weight="bold" fill="#0000FF">向量化</text>
+          <text x="240" y="188" font-size="10.5" text-anchor="middle" fill="#555">同一 embedding 模型</text>
+          <rect x="330" y="146" width="130" height="54" rx="8" fill="#F0F0FF" stroke="#0000FF"/>
+          <text x="395" y="169" font-size="12.5" text-anchor="middle" font-weight="bold" fill="#0000FF">近邻检索 Top-K</text>
+          <text x="395" y="188" font-size="10.5" text-anchor="middle" fill="#555">余弦相似度</text>
+          <rect x="490" y="146" width="74" height="54" rx="8" fill="#FFF7F7" stroke="#C00000"/>
+          <text x="527" y="169" font-size="12.5" text-anchor="middle" font-weight="bold">注入</text>
+          <text x="527" y="188" font-size="10.5" text-anchor="middle" fill="#555">给 LLM</text>
+          <line x1="150" y1="173" x2="178" y2="173" stroke="#0000FF" stroke-width="2" marker-end="url(#ab7)"/>
+          <line x1="300" y1="173" x2="328" y2="173" stroke="#0000FF" stroke-width="2" marker-end="url(#ab7)"/>
+          <line x1="460" y1="173" x2="488" y2="173" stroke="#0000FF" stroke-width="2" marker-end="url(#ab7)"/>
+          <line x1="510" y1="90" x2="420" y2="144" stroke="#0000FF" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#ab7)"/>
+
+          <!-- 语义指纹示意 -->
+          <rect x="20" y="232" width="544" height="80" rx="8" fill="#FAFAFA" stroke="#D9D9D9"/>
+          <text x="36" y="256" font-size="12.5" font-weight="bold">"语义指纹"直觉：意思相近 → 向量空间中距离近</text>
+          <circle cx="120" cy="288" r="5" fill="#0000FF"/><text x="132" y="292" font-size="11" fill="#0000FF">鉴权 auth</text>
+          <circle cx="230" cy="282" r="5" fill="#0000FF"/><text x="242" y="286" font-size="11" fill="#0000FF">login validation</text>
+          <circle cx="380" cy="290" r="5" fill="#999"/><text x="392" y="294" font-size="11" fill="#666">内存池 allocator</text>
+          <circle cx="500" cy="284" r="5" fill="#999"/><text x="512" y="288" font-size="11" fill="#666">日志 log</text>
+          <path d="M120,288 Q175,268 230,282" stroke="#0000FF" stroke-width="1.4" fill="none" stroke-dasharray="4 3"/>
+
+          <!-- 陷阱 -->
+          <rect x="20" y="330" width="544" height="76" rx="8" fill="#FFF7F7" stroke="#C00000" stroke-width="1.4"/>
+          <text x="36" y="354" font-size="12.5" font-weight="bold" fill="#C00000">典型失效模式（代码场景）</text>
+          <text x="36" y="376" font-size="11.5" fill="#333">· 精确符号查询被"语义相邻"干扰：getUserById ≈ getUserByEmail ≈ getUserByName（grep/LSP 秒杀）</text>
+          <text x="36" y="396" font-size="11.5" fill="#333">· 索引漂移：代码每次 push 都在变，重嵌入不及时 → 检索结果"说谎"；检索黑盒，坏结果难调试</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 右：场景/优劣/工具 -->
+    <div style="flex:0.95;display:flex;flex-direction:column;gap:9px;">
+      <div class="card gray">
+        <div class="card-title"><span class="dot"></span>适用场景</div>
+        <ul class="body-list tight">
+          <li class="small"><b>不知道确切符号名</b>的概念性检索；spec 术语与实现术语不一致</li>
+          <li class="small">超大规模陌生仓库<b>冷启动定位</b></li>
+          <li class="small">海量非代码知识（历史 issue、评审记录、聊天记录）检索</li>
+        </ul>
+      </div>
+      <div style="display:flex;gap:9px;">
+        <div class="card gray" style="flex:1;">
+          <div class="card-title" style="color:#007A33;">✓ 优势</div>
+          <ul class="body-list tight">
+            <li class="small">海量异构内容<b>伸缩性最好</b>（百万级块）</li>
+            <li class="small">建库全自动，无需人工策展</li>
+            <li class="small">模糊 / 跨术语查询<span class="em">独一档</span></li>
+          </ul>
+        </div>
+        <div class="card gray" style="flex:1;">
+          <div class="card-title" style="color:#B45309;">△ 劣势</div>
+          <ul class="body-list tight">
+            <li class="small">代码检索<b>精度不足</b></li>
+            <li class="small">索引保鲜是持续负担</li>
+            <li class="small">黑盒难调试；有基础设施成本</li>
+            <li class="small">私有仓需评估代码出境安全</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>代表工具</div>
+        <div style="line-height:1.9;">
+          <span class="chip">Milvus / Zilliz</span>
+          <span class="chip">Qdrant</span>
+          <span class="chip">Pinecone</span>
+          <span class="chip">Turbopuffer（Cursor 后端）</span>
+          <span class="chip blue">sqlite-vec（本地轻量）</span>
+          <span class="chip blue">claude-context（MCP 插件）</span>
+        </div>
+        <div style="font-size:12px;color:#555;margin-top:4px;">最佳实践：BM25 + 向量 + 重排器（reranker）混合检索，以 <span class="em">MCP 插件</span>形式供 Agent 按需调用</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"><span class="part-tag">第二部分 · 业界知识库方法论及技术洞察</span><span>7 / 11</span></div>
+</div>
+</body></html>

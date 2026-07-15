@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="slide" style="padding:0;">
+  <!-- 顶部红色装饰条 -->
+  <div style="height:10px;background:#C00000;"></div>
+  <div style="padding:72px 70px 0 70px;">
+    <div style="font-size:17px;color:#C00000;font-weight:600;letter-spacing:2px;margin-bottom:18px;">洞 察 分 析 报 告</div>
+    <h1 class="title" style="font-size:44px;line-height:1.3;margin-bottom:16px;">AI 编码 Agent 知识库建设洞察<br>——面向大型 C/C++ 项目的技术路线选型与落地方案</h1>
+    <div class="subtitle" style="display:inline-block;font-size:19px;">
+      业界应用洞察 · 方法论与技术洞察 · 项目落地思路&nbsp;&nbsp;|&nbsp;&nbsp;目标：让 Agent <b>一次写对</b>
+    </div>
+  </div>
+
+  <!-- 三大部分导航 -->
+  <div style="display:flex;gap:22px;padding:34px 70px 0 70px;">
+    <div class="card" style="flex:1;border-top:4px solid #C00000;">
+      <div class="card-title" style="font-size:17px;">
+        <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#C00000" stroke-width="2"/><path d="M16.5 16.5L21 21" stroke="#C00000" stroke-width="2" stroke-linecap="round"/></svg>
+        第一部分
+      </div>
+      <div style="font-size:15px;line-height:1.55;">业界知识库<b>应用洞察</b><br><span style="color:#666;font-size:13.5px;">Claude Code / Cursor / DeepWiki 三个头部案例</span></div>
+    </div>
+    <div class="card" style="flex:1;border-top:4px solid #C00000;">
+      <div class="card-title" style="font-size:17px;">
+        <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="4" rx="1" stroke="#C00000" stroke-width="2"/><rect x="3" y="11" width="18" height="4" rx="1" stroke="#C00000" stroke-width="2"/><rect x="3" y="18" width="18" height="3" rx="1" stroke="#C00000" stroke-width="2"/></svg>
+        第二部分
+      </div>
+      <div style="font-size:15px;line-height:1.55;">业界知识库<b>方法论及技术洞察</b><br><span style="color:#666;font-size:13.5px;">LLM Wiki / RAG 知识图谱 / 向量数据库 + 横向对比</span></div>
+    </div>
+    <div class="card" style="flex:1;border-top:4px solid #C00000;">
+      <div class="card-title" style="font-size:17px;">
+        <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3L21 8L12 13L3 8L12 3Z" stroke="#C00000" stroke-width="2" stroke-linejoin="round"/><path d="M3 13L12 18L21 13" stroke="#C00000" stroke-width="2" stroke-linejoin="round"/></svg>
+        第三部分
+      </div>
+      <div style="font-size:15px;line-height:1.55;">项目知识库<b>落地思路</b><br><span style="color:#666;font-size:13.5px;">目标架构 / 落地方案 / 落地节奏</span></div>
+    </div>
+  </div>
+
+  <!-- 核心结论一句话 -->
+  <div style="padding:30px 70px 0 70px;">
+    <div class="takeaway" style="font-size:16px;">
+      <div class="tk-label">核心结论</div>
+      <div>三种方案不是三选一，业界已收敛为<span class="em">分层混合架构</span>：Markdown 知识库为主干（管意图与约束）+ LSP/代码图谱为骨架（管结构关系）+ 向量检索按需补充（管模糊查找）；<span class="em">"一次写对"的天花板由知识质量与保鲜机制决定，而非检索技术</span>。</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>大型 C/C++ 项目（100kloc ~ 数千 kloc）· Claude Code + OpenSpec 工作流</span>
+    <span>2026-07</span>
+  </div>
+</div>
+</body></html>

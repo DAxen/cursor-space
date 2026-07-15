@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="slide">
+  <h1 class="title">3.3 项目知识库落地思路：落地节奏</h1>
+  <div class="subtitle"><b>结论：</b>按<b>依赖顺序</b>分三阶段推进，每阶段有明确<b>验收标准</b>；先在 1 个代表性代码仓试点、再横向复制到其余仓；向量层始终是<b>痛点驱动的可选项</b>，不进入默认节奏。</div>
+
+  <!-- 时间轴 -->
+  <svg width="100%" height="106" viewBox="0 0 1190 106" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+    <defs><marker id="ar11" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#C00000"/></marker></defs>
+    <line x1="30" y1="60" x2="1150" y2="60" stroke="#D9D9D9" stroke-width="4" stroke-linecap="round"/>
+    <line x1="30" y1="60" x2="1120" y2="60" stroke="#C00000" stroke-width="0"/>
+    <circle cx="120" cy="60" r="13" fill="#C00000"/><text x="120" y="66" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold">1</text>
+    <text x="120" y="32" font-size="14" font-weight="bold" text-anchor="middle" fill="#C00000">阶段一 · 组织化</text>
+    <text x="120" y="92" font-size="11.5" text-anchor="middle" fill="#555">试点仓：wiki + 宪法层瘦身</text>
+    <circle cx="430" cy="60" r="13" fill="#C00000"/><text x="430" y="66" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold">2</text>
+    <text x="430" y="32" font-size="14" font-weight="bold" text-anchor="middle" fill="#C00000">阶段二 · 结构层</text>
+    <text x="430" y="92" font-size="11.5" text-anchor="middle" fill="#555">clangd MCP + 路由规则</text>
+    <circle cx="740" cy="60" r="13" fill="#C00000"/><text x="740" y="66" font-size="13" fill="#fff" text-anchor="middle" font-weight="bold">3</text>
+    <text x="740" y="32" font-size="14" font-weight="bold" text-anchor="middle" fill="#C00000">阶段三 · 闭环保鲜</text>
+    <text x="740" y="92" font-size="11.5" text-anchor="middle" fill="#555">双闭环 + CI 巡检 + 横向复制</text>
+    <circle cx="1040" cy="60" r="13" fill="#fff" stroke="#0000FF" stroke-width="3"/><text x="1040" y="66" font-size="12" fill="#0000FF" text-anchor="middle" font-weight="bold">+</text>
+    <text x="1040" y="32" font-size="14" font-weight="bold" text-anchor="middle" fill="#0000FF">可选 · 向量层</text>
+    <text x="1040" y="92" font-size="11.5" text-anchor="middle" fill="#0000FF">仅当痛点数据支持时启动</text>
+    <line x1="140" y1="60" x2="410" y2="60" stroke="#C00000" stroke-width="3" marker-end="url(#ar11)"/>
+    <line x1="450" y1="60" x2="720" y2="60" stroke="#C00000" stroke-width="3" marker-end="url(#ar11)"/>
+    <line x1="760" y1="60" x2="1018" y2="60" stroke="#C00000" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#ar11)"/>
+  </svg>
+
+  <!-- 三阶段详情 -->
+  <div style="display:flex;gap:12px;margin-top:6px;">
+    <div class="card" style="flex:1;">
+      <div class="card-title" style="font-size:14.5px;"><span class="dot"></span>阶段一：知识组织化（试点仓）</div>
+      <ul class="body-list tight">
+        <li class="small">选 1 个<b>代表性代码仓</b>试点（有活跃开发、有存量 docs/specs）</li>
+        <li class="small">建 wiki 目录树 + index.md；CLAUDE.md 瘦身分层</li>
+        <li class="small">deep-wiki skill 生成初稿 → <span class="em">人工评审定稿</span>（优先架构页、约束页）</li>
+      </ul>
+      <div style="border:1px dashed #C00000;border-radius:6px;padding:5px 9px;margin-top:6px;font-size:11.5px;">
+        <b style="color:#C00000;">验收：</b>Agent 拿典型任务实测——能通过 index.md 两跳内找到正确的架构 / 约束页
+      </div>
+    </div>
+    <div class="card" style="flex:1;">
+      <div class="card-title" style="font-size:14.5px;"><span class="dot"></span>阶段二：结构层接入</div>
+      <ul class="body-list tight">
+        <li class="small">打通 <span class="em">compile_commands.json</span> 生成（进 CI 产物）</li>
+        <li class="small">部署 clangd MCP；宪法层写入 <b>LSP/grep 路由规则</b></li>
+        <li class="small">超大仓评估 clangd <b>remote-index</b></li>
+      </ul>
+      <div style="border:1px dashed #C00000;border-radius:6px;padding:5px 9px;margin-top:6px;font-size:11.5px;">
+        <b style="color:#C00000;">验收：</b>跨模块引用追踪任务中，Agent 默认走 LSP；符号误定位显著减少
+      </div>
+    </div>
+    <div class="card" style="flex:1;">
+      <div class="card-title" style="font-size:14.5px;"><span class="dot"></span>阶段三：闭环保鲜 + 复制</div>
+      <ul class="body-list tight">
+        <li class="small">接通<b>双闭环</b>：错误回写 pitfalls/；/opsx:archive 联动 wiki 更新</li>
+        <li class="small">CI 加 wiki lint（死链 / 目录一致性）</li>
+        <li class="small">试点仓模式<b>模板化</b>，横向复制到其余代码仓</li>
+      </ul>
+      <div style="border:1px dashed #C00000;border-radius:6px;padding:5px 9px;margin-top:6px;font-size:11.5px;">
+        <b style="color:#C00000;">验收：</b>连续多个迭代 wiki 与代码不漂移；同类错误不复发
+      </div>
+    </div>
+  </div>
+
+  <!-- 度量 + 决策门 -->
+  <div style="display:flex;gap:12px;margin-top:10px;">
+    <div class="card gray" style="flex:1.35;">
+      <div class="card-title" style="font-size:14px;"><span class="dot"></span>全程度量（判断"一次写对"是否在改善）</div>
+      <div style="display:flex;gap:8px;">
+        <div style="flex:1;text-align:center;background:#fff;border:1px solid #D9D9D9;border-radius:6px;padding:7px 4px;">
+          <div style="font-size:12.5px;font-weight:700;">一次通过率</div>
+          <div style="font-size:10.5px;color:#555;">PR 无需返工的比例</div>
+        </div>
+        <div style="flex:1;text-align:center;background:#fff;border:1px solid #D9D9D9;border-radius:6px;padding:7px 4px;">
+          <div style="font-size:12.5px;font-weight:700;">评审往返次数</div>
+          <div style="font-size:10.5px;color:#555;">约束类意见应趋零</div>
+        </div>
+        <div style="flex:1;text-align:center;background:#fff;border:1px solid #D9D9D9;border-radius:6px;padding:7px 4px;">
+          <div style="font-size:12.5px;font-weight:700;">检索失败案例数</div>
+          <div style="font-size:10.5px;color:#555;">按类型记录归因</div>
+        </div>
+        <div style="flex:1;text-align:center;background:#fff;border:1px solid #D9D9D9;border-radius:6px;padding:7px 4px;">
+          <div style="font-size:12.5px;font-weight:700;">重复错误率</div>
+          <div style="font-size:10.5px;color:#555;">同类错误二次出现</div>
+        </div>
+      </div>
+    </div>
+    <div class="takeaway" style="flex:1;">
+      <div class="tk-label">决策门</div>
+      <div style="font-size:13px;line-height:1.55;">向量层启动条件：检索失败案例中"<span class="em">概念找不到 / 术语不一致</span>"类占比持续偏高。满足才立项，以 <span class="em">MCP 插件</span>接入，不改造检索主干。</div>
+    </div>
+  </div>
+
+  <div class="footer"><span class="part-tag">第三部分 · 项目知识库落地思路</span><span>11 / 11</span></div>
+</div>
+</body></html>
