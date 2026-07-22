@@ -9,6 +9,20 @@
 
 Home Assistant 是一套**事件驱动的嵌入式家居控制平台**：以 Python asyncio Core 为中枢，用 Event Bus 解耦集成；用统一的 Entity / Device / Service 抽象屏蔽厂商差异；用 Supervisor + OS 把“应用”升级成“可更新的家用设备体验”。
 
+### 关键字速览（架构特征）
+
+| 关键字 | 含义 |
+|--------|------|
+| **事件驱动** | Event Bus 是系统心跳；组件只听/发事件，互不硬依赖 |
+| **状态中枢** | State Machine 是当前世界的真相源；变更即广播 `state_changed` |
+| **领域标准化** | `light` / `switch` 等 Domain Entity 统一跨品牌控制语言 |
+| **可插拔集成** | Integration + Config Entry 动态扩展，不改 Core |
+| **异步优先** | asyncio 主循环 + Executor 隔离阻塞 I/O |
+| **分层可裁剪** | OS → Supervisor → Core → Frontend，按部署形态增减能力 |
+| **单向实时 UI** | Frontend 经 WebSocket 镜像 `hass`，不持业务真相 |
+
+一串记：**事件驱动 · 状态中枢 · 领域标准化 · 可插拔 · 异步 · 分层栈 · 实时镜像**
+
 ---
 
 ## 2. 产品栈分层（从下到上）
