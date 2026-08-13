@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="slide">
+  <h1 class="title">2.2 方法二：RAG 知识图谱（GraphRAG）</h1>
+  <div class="subtitle"><b>一句话原理：</b>知识拆成"<b>节点（实体）+ 边（关系）</b>"，查询时不是"找相似文本"而是"<b>顺着边走</b>"（多跳遍历返回连通子图）。代码场景必须区分两个亚种：<b>确定性代码结构图谱</b> vs <b>LLM 抽取的语义图谱</b>，成本与可靠性差别巨大。</div>
+
+  <div class="body-wrap">
+    <!-- 左：原理示意 -->
+    <div style="flex:1.05;">
+      <div class="card" style="height:100%;">
+        <div class="card-title"><span class="dot"></span>原理示意：图遍历 vs 相似检索</div>
+        <svg width="100%" height="420" viewBox="0 0 580 420" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+          <defs>
+            <marker id="ar6" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#C00000"/></marker>
+            <marker id="ag6" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#666"/></marker>
+          </defs>
+          <text x="20" y="24" font-size="13.5" font-weight="bold" fill="#C00000">查询："修改 RateLimiter 接口，影响面有多大？"</text>
+
+          <!-- 图 -->
+          <!-- 节点 -->
+          <g>
+            <ellipse cx="120" cy="90" rx="66" ry="26" fill="#C00000"/>
+            <text x="120" y="96" font-size="12.5" fill="#fff" text-anchor="middle" font-weight="bold">RateLimiter</text>
+
+            <ellipse cx="300" cy="66" rx="62" ry="24" fill="#F0F0FF" stroke="#0000FF" stroke-width="1.5"/>
+            <text x="300" y="72" font-size="12" fill="#0000FF" text-anchor="middle">GatewayMod</text>
+            <ellipse cx="300" cy="132" rx="62" ry="24" fill="#F0F0FF" stroke="#0000FF" stroke-width="1.5"/>
+            <text x="300" y="138" font-size="12" fill="#0000FF" text-anchor="middle">SessionMgr</text>
+
+            <ellipse cx="478" cy="66" rx="58" ry="24" fill="#fff" stroke="#999" stroke-width="1.4"/>
+            <text x="478" y="72" font-size="12" text-anchor="middle">配置文件 conf</text>
+            <ellipse cx="478" cy="132" rx="58" ry="24" fill="#fff" stroke="#999" stroke-width="1.4"/>
+            <text x="478" y="138" font-size="12" text-anchor="middle">决策 ADR-017</text>
+
+            <!-- 边 -->
+            <line x1="184" y1="80" x2="240" y2="70" stroke="#C00000" stroke-width="2" marker-end="url(#ar6)"/>
+            <text x="212" y="62" font-size="10.5" fill="#C00000">被调用 calls</text>
+            <line x1="184" y1="102" x2="240" y2="126" stroke="#C00000" stroke-width="2" marker-end="url(#ar6)"/>
+            <text x="196" y="128" font-size="10.5" fill="#C00000">被依赖</text>
+            <line x1="362" y1="66" x2="418" y2="66" stroke="#666" stroke-width="1.6" marker-end="url(#ag6)"/>
+            <text x="390" y="57" font-size="10.5" fill="#666">引用</text>
+            <line x1="362" y1="132" x2="418" y2="132" stroke="#666" stroke-width="1.6" marker-end="url(#ag6)"/>
+            <text x="382" y="124" font-size="10.5" fill="#666">受约束于</text>
+          </g>
+          <text x="120" y="178" font-size="11.5" fill="#333">→ 返回<tspan fill="#0000FF" font-weight="bold">连通子图</tspan>（路径即证据），而非"听起来相关"的文档列表</text>
+
+          <!-- 两个亚种 -->
+          <rect x="20" y="200" width="266" height="200" rx="8" fill="#FFF7F7" stroke="#C00000" stroke-width="1.5"/>
+          <text x="153" y="226" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#C00000">亚种 A：代码结构图谱（确定性）</text>
+          <text x="36" y="250" font-size="11.5" fill="#333">节点=文件/类/函数；边=调用/继承/包含</text>
+          <text x="36" y="270" font-size="11.5" fill="#333">tree-sitter / 编译器解析，<tspan fill="#0000FF">精确无幻觉</tspan></text>
+          <text x="36" y="296" font-size="11.5" font-weight="bold" fill="#333">C/C++ 注意：宏/模板/函数指针场景下，</text>
+          <text x="36" y="314" font-size="11.5" font-weight="bold" fill="#C00000">最优解是编译器级 clangd/LSP，而非自建图库</text>
+          <text x="36" y="342" font-size="11" fill="#555">工具：code-graph-rag(Memgraph)</text>
+          <text x="36" y="360" font-size="11" fill="#555">GraphRAG-MCP(本地零LLM成本)</text>
+          <text x="36" y="378" font-size="11" fill="#555">Kythe(Google) / Glean(Meta) / Sourcegraph</text>
+
+          <rect x="300" y="200" width="266" height="200" rx="8" fill="#F0F0FF" stroke="#0000FF" stroke-width="1.5"/>
+          <text x="433" y="226" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#0000FF">亚种 B：语义知识图谱（LLM 抽取）</text>
+          <text x="316" y="250" font-size="11.5" fill="#333">LLM 从文档/对话抽取实体关系入图库</text>
+          <text x="316" y="270" font-size="11.5" fill="#333">支持社区检测+分层摘要回答全局性问题</text>
+          <text x="316" y="296" font-size="11.5" font-weight="bold" fill="#333">代价：schema 设计 + 抽取管线 + 图库运维</text>
+          <text x="316" y="314" font-size="11.5" font-weight="bold" fill="#C00000">+ 保鲜，且抽取质量需人工复核</text>
+          <text x="316" y="342" font-size="11" fill="#555">工具：Microsoft GraphRAG / Neo4j</text>
+          <text x="316" y="360" font-size="11" fill="#555">Graphiti/Zep(时序图谱) / Cognee(ECL)</text>
+          <text x="316" y="378" font-size="11" fill="#555">Youtu-GraphRAG(schema引导,ICLR'26)</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 右：场景/优劣 -->
+    <div style="flex:0.95;display:flex;flex-direction:column;gap:9px;">
+      <div class="card gray">
+        <div class="card-title"><span class="dot"></span>适用场景</div>
+        <ul class="body-list tight">
+          <li class="small"><b>影响面分析</b>："改这个接口会波及哪些下游？"</li>
+          <li class="small">跨模块<b>调用链追踪</b>、多跳推理（需求变更 → 约束来源）</li>
+          <li class="small">需要审计 / 溯源的合规场景</li>
+        </ul>
+      </div>
+      <div style="display:flex;gap:9px;">
+        <div class="card gray" style="flex:1;">
+          <div class="card-title" style="color:#007A33;">✓ 优势</div>
+          <ul class="body-list tight">
+            <li class="small"><b>关系查询与多跳遍历</b>是其他方案做不到的</li>
+            <li class="small">结果可解释：路径即证据</li>
+            <li class="small">知识越加越"密"而非越加越"吵"</li>
+          </ul>
+        </div>
+        <div class="card gray" style="flex:1;">
+          <div class="card-title" style="color:#B45309;">△ 劣势</div>
+          <ul class="body-list tight">
+            <li class="small">三者中<b>建设/维护成本最高</b></li>
+            <li class="small">LLM 抽取有噪声与幻觉</li>
+            <li class="small">查询需生成 Cypher / 专用工具，集成复杂</li>
+            <li class="small"><span class="em">仅当关系类查询是高频刚需时 ROI 才成立</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="takeaway">
+        <div class="tk-label">判断</div>
+        <div>C/C++ 项目的"图谱需求"应优先由 <span class="em">clangd/LSP（编译器级、零抽取成本）</span>满足；通用语义图谱除非有高频多跳查询刚需，否则暂缓。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"><span class="part-tag">第二部分 · 业界知识库方法论及技术洞察</span><span>6 / 11</span></div>
+</div>
+</body></html>

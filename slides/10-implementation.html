@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="slide">
+  <h1 class="title">3.2 项目知识库落地思路：落地方案</h1>
+  <div class="subtitle"><b>结论：</b>三个工作包按依赖递进——<b>存量资产组织化</b>（纯文档工作，立即见效）→ <b>C/C++ 结构层</b>（工程量小、价值高）→ <b>闭环与保鲜机制</b>（决定知识库存亡）；"一次写对"的天花板由第三个工作包决定。</div>
+
+  <div style="display:flex;gap:14px;">
+    <!-- 工作包1 -->
+    <div class="card" style="flex:1;border-top:4px solid #C00000;">
+      <div class="card-title" style="font-size:15.5px;">
+        <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v14H4z" stroke="#C00000" stroke-width="2" rx="2"/><path d="M4 9h16M9 9v10" stroke="#C00000" stroke-width="2"/></svg>
+        工作包① 存量资产组织化
+      </div>
+      <div style="font-size:12px;color:#0000FF;font-weight:600;margin-bottom:6px;">纯文档工作 · 零基础设施依赖</div>
+      <ul class="body-list tight">
+        <li class="small">盘点 docs / specs / skills 存量，建 <b>docs/wiki/ 目录树</b></li>
+        <li class="small">编写 <span class="em">index.md 总目录</span>：每页一行链接 + 一句话摘要，按类别组织（Karpathy 模式核心件）</li>
+        <li class="small"><b>CLAUDE.md 瘦身分层</b>：根文件只留跨域硬约束 + 命令 + <span class="em">检索协议</span>；模块目录放局部 CLAUDE.md</li>
+        <li class="small">用 deep-wiki 类 skill <b>自动生成初稿</b>，架构页 / 约束页<span class="em">人工评审后</span>才收编</li>
+      </ul>
+      <div style="background:#F2F2F2;border-radius:6px;padding:6px 10px;margin-top:6px;font-size:11.5px;color:#333;">
+        <b>产出：</b>可导航的分层 wiki + 瘦身后的宪法层
+      </div>
+    </div>
+
+    <!-- 工作包2 -->
+    <div class="card" style="flex:1;border-top:4px solid #C00000;">
+      <div class="card-title" style="font-size:15.5px;">
+        <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 6L3 12l5 6M16 6l5 6-5 6" stroke="#C00000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        工作包② C/C++ 结构层
+      </div>
+      <div style="font-size:12px;color:#0000FF;font-weight:600;margin-bottom:6px;">工程量小 · 大仓价值最高</div>
+      <ul class="body-list tight">
+        <li class="small">生成 <span class="em">compile_commands.json</span>（CMake 一个开关；其他构建系统用 bear / compiledb）</li>
+        <li class="small">部署 <b>clangd MCP Server</b>（clangd-mcp-server，Chromium 级大仓开箱即用；超大仓可选 remote-index）</li>
+        <li class="small">CLAUDE.md 加<b>路由规则</b>：<span class="em">"符号查找用 LSP 工具；字符串 / 注释 / 日志检索才用 grep"</span>（最易遗漏的一条）</li>
+        <li class="small">验证：让 Agent 做一次跨模块引用追踪，对比 grep 与 LSP 的上下文消耗</li>
+      </ul>
+      <div style="background:#F2F2F2;border-radius:6px;padding:6px 10px;margin-top:6px;font-size:11.5px;color:#333;">
+        <b>产出：</b>编译器级符号导航，替代"自建知识图谱"
+      </div>
+    </div>
+
+    <!-- 工作包3 -->
+    <div class="card" style="flex:1;border-top:4px solid #C00000;">
+      <div class="card-title" style="font-size:15.5px;">
+        <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3a9 9 0 1 1-9 9" stroke="#C00000" stroke-width="2" stroke-linecap="round"/><path d="M3 5v4h4" stroke="#C00000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        工作包③ 闭环与保鲜机制
+      </div>
+      <div style="font-size:12px;color:#0000FF;font-weight:600;margin-bottom:6px;">决定知识库存亡 · 复利来源</div>
+      <ul class="body-list tight">
+        <li class="small"><b>OpenSpec 联动</b>：<span class="em">/opsx:archive</span> 归档变更时同步检查受影响 wiki 页；spec delta 合入时更新架构页</li>
+        <li class="small"><b>错误回写</b>：Agent 犯错 → 修正 → 教训写进 pitfalls/ 或约束页（一句话即可）</li>
+        <li class="small"><b>CI 巡检</b>：wiki lint（死链、目录一致性），搭 openspec validate 的车</li>
+        <li class="small"><b>痛点观测</b>：记录检索失败案例；"概念找不到"高频出现时，再评估向量层</li>
+      </ul>
+      <div style="background:#F2F2F2;border-radius:6px;padding:6px 10px;margin-top:6px;font-size:11.5px;color:#333;">
+        <b>产出：</b>知识随代码演进而复利，不腐化
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部：双闭环示意 -->
+  <div class="card" style="margin-top:12px;">
+    <div class="card-title"><span class="dot"></span>两个关键闭环（比任何检索基础设施都更接近"一次写对"）</div>
+    <svg width="100%" height="118" viewBox="0 0 1160 118" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+      <defs>
+        <marker id="ar10" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#C00000"/></marker>
+        <marker id="ab10" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#0000FF"/></marker>
+      </defs>
+      <!-- 闭环1 -->
+      <text x="20" y="22" font-size="13" font-weight="bold" fill="#C00000">闭环 1：错误 → 教训回写</text>
+      <rect x="20" y="34" width="120" height="40" rx="6" fill="#FFF7F7" stroke="#C00000"/><text x="80" y="58" font-size="12" text-anchor="middle">Agent 写错代码</text>
+      <rect x="180" y="34" width="120" height="40" rx="6" fill="#FFF7F7" stroke="#C00000"/><text x="240" y="58" font-size="12" text-anchor="middle">人工修正 / 评审</text>
+      <rect x="340" y="34" width="150" height="40" rx="6" fill="#FFF7F7" stroke="#C00000"/><text x="415" y="52" font-size="12" text-anchor="middle">教训写入 pitfalls/</text><text x="415" y="67" font-size="10.5" text-anchor="middle" fill="#555">或对应约束页</text>
+      <line x1="140" y1="54" x2="178" y2="54" stroke="#C00000" stroke-width="2" marker-end="url(#ar10)"/>
+      <line x1="300" y1="54" x2="338" y2="54" stroke="#C00000" stroke-width="2" marker-end="url(#ar10)"/>
+      <path d="M415,74 Q415,104 250,104 Q80,104 80,76" stroke="#C00000" stroke-width="1.6" fill="none" stroke-dasharray="5 3" marker-end="url(#ar10)"/>
+      <text x="248" y="99" font-size="10.5" fill="#C00000" text-anchor="middle">下次会话不再犯</text>
+
+      <!-- 闭环2 -->
+      <text x="620" y="22" font-size="13" font-weight="bold" fill="#0000FF">闭环 2：变更 → 知识同步</text>
+      <rect x="620" y="34" width="130" height="40" rx="6" fill="#F0F0FF" stroke="#0000FF"/><text x="685" y="52" font-size="12" text-anchor="middle">代码变更合入</text><text x="685" y="67" font-size="10.5" text-anchor="middle" fill="#555">spec delta 归档</text>
+      <rect x="790" y="34" width="150" height="40" rx="6" fill="#F0F0FF" stroke="#0000FF"/><text x="865" y="52" font-size="12" text-anchor="middle">/opsx:archive 钩子</text><text x="865" y="67" font-size="10.5" text-anchor="middle" fill="#555">检查受影响 wiki 页</text>
+      <rect x="980" y="34" width="150" height="40" rx="6" fill="#F0F0FF" stroke="#0000FF"/><text x="1055" y="52" font-size="12" text-anchor="middle">wiki 更新 + CI lint</text><text x="1055" y="67" font-size="10.5" text-anchor="middle" fill="#555">死链 / 一致性检查</text>
+      <line x1="750" y1="54" x2="788" y2="54" stroke="#0000FF" stroke-width="2" marker-end="url(#ab10)"/>
+      <line x1="940" y1="54" x2="978" y2="54" stroke="#0000FF" stroke-width="2" marker-end="url(#ab10)"/>
+      <path d="M1055,74 Q1055,104 870,104 Q685,104 685,76" stroke="#0000FF" stroke-width="1.6" fill="none" stroke-dasharray="5 3" marker-end="url(#ab10)"/>
+      <text x="870" y="99" font-size="10.5" fill="#0000FF" text-anchor="middle">知识与代码永不漂移</text>
+    </svg>
+  </div>
+
+  <div class="footer"><span class="part-tag">第三部分 · 项目知识库落地思路</span><span>10 / 11</span></div>
+</div>
+</body></html>

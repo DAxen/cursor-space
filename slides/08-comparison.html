@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="slide">
+  <h1 class="title">2.4 三类方案横向对比：回答不同的问题，不构成竞争关系</h1>
+  <div class="subtitle"><b>结论：</b>Wiki 管"<b>意图与约束</b>"，图谱管"<b>关系</b>"，向量管"<b>模糊找</b>"；此外还有两个隐藏成员——<b>Agentic Search</b>（现场检索主干）与 <b>LSP/编译器符号索引</b>（C/C++ 结构层最优解），完整拼图是五者分层组合。</div>
+
+  <table class="cmp" style="margin-bottom:12px;">
+    <tr>
+      <th style="width:110px;">维度</th>
+      <th>LLM Wiki<br><span style="font-weight:400;font-size:12px;color:#666;">Markdown 知识库</span></th>
+      <th>RAG 知识图谱<br><span style="font-weight:400;font-size:12px;color:#666;">节点+边+遍历</span></th>
+      <th>向量数据库<br><span style="font-weight:400;font-size:12px;color:#666;">Embedding 近邻</span></th>
+      <th style="background:#FFF7F7;">代码图谱 / LSP<br><span style="font-weight:400;font-size:12px;color:#666;">clangd·Kythe·Glean</span></th>
+      <th style="background:#FFF7F7;">Agentic Search<br><span style="font-weight:400;font-size:12px;color:#666;">grep / read 现场检索</span></th>
+    </tr>
+    <tr>
+      <td class="hd">回答的问题</td>
+      <td>模块的<b>设计意图 / 约束</b>是什么</td>
+      <td>A 和 B 是什么<b>关系</b>、影响面多大</td>
+      <td>哪里<b>讨论过</b>这个概念</td>
+      <td>谁<b>定义 / 引用</b>了这个符号</td>
+      <td>现在代码<b>到底是什么样</b></td>
+    </tr>
+    <tr>
+      <td class="hd">精确性</td>
+      <td><span style="color:#007A33;font-weight:700;">高</span>（人审过）</td>
+      <td>中（LLM 抽取有噪声）</td>
+      <td><span style="color:#B45309;font-weight:700;">低~中</span>（模糊）</td>
+      <td><span style="color:#007A33;font-weight:700;">极高</span>（编译器级）</td>
+      <td><span style="color:#007A33;font-weight:700;">极高</span>（实时）</td>
+    </tr>
+    <tr>
+      <td class="hd">建设成本</td>
+      <td><span style="color:#007A33;font-weight:700;">低</span></td>
+      <td><span style="color:#B45309;font-weight:700;">高</span>（schema+管线+运维）</td>
+      <td>中</td>
+      <td><span style="color:#007A33;font-weight:700;">低</span>（clangd 现成）</td>
+      <td><span style="color:#007A33;font-weight:700;">零</span></td>
+    </tr>
+    <tr>
+      <td class="hd">维护成本</td>
+      <td>中（需策展纪律）</td>
+      <td><span style="color:#B45309;font-weight:700;">高</span>（保鲜困难）</td>
+      <td>中（持续重嵌入）</td>
+      <td>低（跟随编译）</td>
+      <td>零</td>
+    </tr>
+    <tr>
+      <td class="hd">可解释/可评审</td>
+      <td><span style="color:#007A33;font-weight:700;">最强</span>（可 diff）</td>
+      <td>强（路径即证据）</td>
+      <td><span style="color:#B45309;font-weight:700;">弱</span>（黑盒）</td>
+      <td>强</td>
+      <td>强</td>
+    </tr>
+    <tr>
+      <td class="hd">Claude Code 集成</td>
+      <td><span class="em">原生</span>（就是读文件）</td>
+      <td>需 MCP（自建）</td>
+      <td>需 MCP（插件）</td>
+      <td>需 MCP（<span class="em">现成</span>）</td>
+      <td><span class="em">原生</span></td>
+    </tr>
+  </table>
+
+  <!-- 分工示意 -->
+  <div style="display:flex;gap:14px;align-items:stretch;">
+    <div class="card" style="flex:1.5;">
+      <div class="card-title"><span class="dot"></span>一次编码任务中的分工示意</div>
+      <svg width="100%" height="128" viewBox="0 0 700 128" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+        <defs><marker id="ar8" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#C00000"/></marker></defs>
+        <rect x="6" y="18" width="150" height="72" rx="8" fill="#FFF7F7" stroke="#C00000" stroke-width="1.5"/>
+        <text x="81" y="42" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#C00000">① 读 Wiki / 约束</text>
+        <text x="81" y="62" font-size="10.5" text-anchor="middle" fill="#555">拿业务背景·架构意图</text>
+        <text x="81" y="78" font-size="10.5" text-anchor="middle" fill="#555">·编码红线</text>
+        <rect x="188" y="18" width="150" height="72" rx="8" fill="#F0F0FF" stroke="#0000FF" stroke-width="1.5"/>
+        <text x="263" y="42" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#0000FF">② 概念定位(可选)</text>
+        <text x="263" y="62" font-size="10.5" text-anchor="middle" fill="#555">向量检索：不知道名字</text>
+        <text x="263" y="78" font-size="10.5" text-anchor="middle" fill="#555">时按"意思"找入口</text>
+        <rect x="370" y="18" width="150" height="72" rx="8" fill="#FFF7F7" stroke="#C00000" stroke-width="1.5"/>
+        <text x="445" y="42" font-size="12.5" font-weight="bold" text-anchor="middle" fill="#C00000">③ 结构确认</text>
+        <text x="445" y="62" font-size="10.5" text-anchor="middle" fill="#555">LSP/图谱：定义·引用</text>
+        <text x="445" y="78" font-size="10.5" text-anchor="middle" fill="#555">·调用链·影响面</text>
+        <rect x="552" y="18" width="142" height="72" rx="8" fill="#F2F2F2" stroke="#999"/>
+        <text x="623" y="42" font-size="12.5" font-weight="bold" text-anchor="middle">④ 现场验证+写码</text>
+        <text x="623" y="62" font-size="10.5" text-anchor="middle" fill="#555">grep/read 复核事实</text>
+        <text x="623" y="78" font-size="10.5" text-anchor="middle" fill="#555">后落笔</text>
+        <line x1="156" y1="54" x2="186" y2="54" stroke="#C00000" stroke-width="2" marker-end="url(#ar8)"/>
+        <line x1="338" y1="54" x2="368" y2="54" stroke="#C00000" stroke-width="2" marker-end="url(#ar8)"/>
+        <line x1="520" y1="54" x2="550" y2="54" stroke="#C00000" stroke-width="2" marker-end="url(#ar8)"/>
+        <text x="350" y="116" font-size="11.5" text-anchor="middle" fill="#555">没有任何头部工具用单一路线 —— 差异只在"以谁为主干"</text>
+      </svg>
+    </div>
+    <div class="takeaway" style="flex:1;align-items:flex-start;">
+      <div class="tk-label">选型口诀</div>
+      <div style="font-size:14px;line-height:1.65;">
+        高价值知识 → <span class="em">写成 Markdown（人审）</span><br>
+        结构关系（C/C++）→ <span class="em">clangd/LSP，别自建图库</span><br>
+        模糊概念检索 → <span class="em">向量作 MCP 插件，痛点驱动再上</span><br>
+        语义知识图谱 → 仅当多跳关系查询成高频刚需
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"><span class="part-tag">第二部分 · 业界知识库方法论及技术洞察</span><span>8 / 11</span></div>
+</div>
+</body></html>

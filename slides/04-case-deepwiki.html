@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="slide">
+  <h1 class="title">1.3 案例三：DeepWiki（Cognition / Devin）—— 自动生成的代码仓 Wiki</h1>
+  <div class="subtitle"><b>结论：</b>对大型仓库，"<b>预消化</b>"的知识层（更小、更干净、可导航的 Markdown 制品）能显著提升 Agent 理解效率——Devin 问答先查 Wiki 再定位代码；Google CodeWiki、Greptile、微软 deep-wiki skill 同属此路线。</div>
+
+  <div class="body-wrap">
+    <!-- 左：要点 -->
+    <div style="flex:0.95;display:flex;flex-direction:column;gap:10px;">
+      <div class="card gray">
+        <div class="card-title"><span class="dot"></span>知识管理方式</div>
+        <ul class="body-list tight">
+          <li>自动分析仓库结构 → LLM 生成<b>架构图（Mermaid）、组件表、时序图</b>的 wiki 页面</li>
+          <li>每个论断带 <span class="em">file:line 引用锚点</span>，可回溯到源码</li>
+          <li><b>PR 合并后自动更新</b>，保持与代码同步</li>
+          <li>支持 <span class="em">.devin/wiki.json</span> 人工"导演"：指定页面结构与重点，替代全自动规划</li>
+          <li>生成 <span class="em">llms.txt / AGENTS.md</span> 导航文件，作为 Agent 的"地图入口"</li>
+        </ul>
+      </div>
+      <div class="card gray">
+        <div class="card-title"><span class="dot"></span>同路线工具</div>
+        <div style="line-height:1.9;">
+          <span class="chip">Google CodeWiki（2025.11）</span>
+          <span class="chip">Greptile（图感知摘要）</span>
+          <span class="chip">DeepWiki-Open（开源）</span>
+          <span class="chip blue">microsoft/agent-skills deep-wiki（可自部署）</span>
+        </div>
+      </div>
+      <div class="takeaway">
+        <div class="tk-label">启示</div>
+        <div>这是"Obsidian / LLM Wiki 思路"的工业化验证；但要记住实证结论：<span class="em">自动生成打底、人工策展定稿</span>——手写的上下文文件效果优于纯自动生成。</div>
+      </div>
+    </div>
+
+    <!-- 右：示意图 -->
+    <div style="flex:1.05;">
+      <div class="card" style="height:100%;">
+        <div class="card-title"><span class="dot"></span>生成与消费链路</div>
+        <svg width="100%" height="438" viewBox="0 0 580 438" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+          <defs>
+            <marker id="ar3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#C00000"/></marker>
+            <marker id="ab3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#0000FF"/></marker>
+          </defs>
+          <!-- 代码仓 -->
+          <rect x="20" y="16" width="160" height="64" rx="8" fill="#F2F2F2" stroke="#999"/>
+          <text x="100" y="42" font-size="14" font-weight="bold" text-anchor="middle">代码仓</text>
+          <text x="100" y="62" font-size="11.5" text-anchor="middle" fill="#555">结构·依赖·README·测试</text>
+
+          <!-- 生成管线 -->
+          <rect x="230" y="10" width="330" height="76" rx="8" fill="#FFF7F7" stroke="#C00000" stroke-width="1.5"/>
+          <text x="395" y="32" font-size="13.5" font-weight="bold" text-anchor="middle" fill="#C00000">Wiki 生成管线（LLM）</text>
+          <rect x="244" y="42" width="94" height="32" rx="4" fill="#fff" stroke="#D9A0A0"/><text x="291" y="63" font-size="11.5" text-anchor="middle">仓库扫描聚类</text>
+          <rect x="346" y="42" width="94" height="32" rx="4" fill="#fff" stroke="#D9A0A0"/><text x="393" y="63" font-size="11.5" text-anchor="middle">页面规划</text>
+          <rect x="448" y="42" width="98" height="32" rx="4" fill="#fff" stroke="#D9A0A0"/><text x="497" y="63" font-size="11.5" text-anchor="middle">生成+图表+引用</text>
+          <line x1="180" y1="48" x2="228" y2="48" stroke="#C00000" stroke-width="2" marker-end="url(#ar3)"/>
+
+          <!-- wiki.json 导演 -->
+          <rect x="230" y="108" width="160" height="46" rx="8" fill="#F0F0FF" stroke="#0000FF" stroke-width="1.4"/>
+          <text x="310" y="128" font-size="12.5" text-anchor="middle" font-weight="bold" fill="#0000FF">.devin/wiki.json</text>
+          <text x="310" y="146" font-size="11" text-anchor="middle" fill="#555">人工指定页面与重点</text>
+          <line x1="330" y1="108" x2="350" y2="88" stroke="#0000FF" stroke-width="1.6" marker-end="url(#ab3)"/>
+
+          <!-- PR自动更新 -->
+          <rect x="420" y="108" width="140" height="46" rx="8" fill="#F0F0FF" stroke="#0000FF" stroke-width="1.4"/>
+          <text x="490" y="128" font-size="12.5" text-anchor="middle" font-weight="bold" fill="#0000FF">PR 合并触发</text>
+          <text x="490" y="146" font-size="11" text-anchor="middle" fill="#555">Wiki 自动增量更新</text>
+          <line x1="490" y1="108" x2="490" y2="88" stroke="#0000FF" stroke-width="1.6" marker-end="url(#ab3)"/>
+
+          <!-- Wiki 制品 -->
+          <line x1="395" y1="86" x2="290" y2="182" stroke="#C00000" stroke-width="0" />
+          <line x1="300" y1="160" x2="300" y2="182" stroke="#C00000" stroke-width="0"/>
+          <rect x="60" y="188" width="460" height="118" rx="8" fill="#FFF7F7" stroke="#C00000" stroke-width="1.5"/>
+          <text x="290" y="212" font-size="14" font-weight="bold" text-anchor="middle" fill="#C00000">Wiki 知识制品（预消化层）</text>
+          <rect x="80" y="224" width="130" height="66" rx="6" fill="#fff" stroke="#D9A0A0"/>
+          <text x="145" y="248" font-size="12" text-anchor="middle" font-weight="bold">架构页</text>
+          <text x="145" y="266" font-size="10.5" text-anchor="middle" fill="#555">Mermaid 架构图</text>
+          <text x="145" y="281" font-size="10.5" text-anchor="middle" fill="#555">组件表 + 依赖关系</text>
+          <rect x="226" y="224" width="130" height="66" rx="6" fill="#fff" stroke="#D9A0A0"/>
+          <text x="291" y="248" font-size="12" text-anchor="middle" font-weight="bold">模块页 × N</text>
+          <text x="291" y="266" font-size="10.5" text-anchor="middle" fill="#555">时序图 / 状态图</text>
+          <text x="291" y="281" font-size="10.5" text-anchor="middle" fill="#0000FF">每论断带 file:line</text>
+          <rect x="372" y="224" width="130" height="66" rx="6" fill="#fff" stroke="#D9A0A0"/>
+          <text x="437" y="248" font-size="12" text-anchor="middle" font-weight="bold">导航入口</text>
+          <text x="437" y="266" font-size="10.5" text-anchor="middle" fill="#555">llms.txt / index</text>
+          <text x="437" y="281" font-size="10.5" text-anchor="middle" fill="#555">AGENTS.md</text>
+          <line x1="395" y1="86" x2="395" y2="100" stroke="#C00000" stroke-width="0"/>
+          <line x1="310" y1="154" x2="310" y2="164" stroke="#C00000" stroke-width="0"/>
+          <line x1="290" y1="86" x2="290" y2="186" stroke="#C00000" stroke-width="2" marker-end="url(#ar3)"/>
+
+          <!-- 消费 -->
+          <rect x="60" y="340" width="210" height="72" rx="8" fill="#F2F2F2" stroke="#999"/>
+          <text x="165" y="366" font-size="13" font-weight="bold" text-anchor="middle">Ask Devin / Agent 问答</text>
+          <text x="165" y="386" font-size="11.5" text-anchor="middle" fill="#555">① 先读 Wiki 拿全局图景</text>
+          <text x="165" y="402" font-size="11.5" text-anchor="middle" fill="#555">② 再按引用锚点定位源码</text>
+          <rect x="310" y="340" width="210" height="72" rx="8" fill="#F2F2F2" stroke="#999"/>
+          <text x="415" y="366" font-size="13" font-weight="bold" text-anchor="middle">新人 / 团队浏览</text>
+          <text x="415" y="386" font-size="11.5" text-anchor="middle" fill="#555">人和 Agent 共用同一份</text>
+          <text x="415" y="402" font-size="11.5" text-anchor="middle" fill="#555">可评审、可 diff、可追溯</text>
+          <line x1="200" y1="306" x2="165" y2="338" stroke="#C00000" stroke-width="1.8" marker-end="url(#ar3)"/>
+          <line x1="380" y1="306" x2="415" y2="338" stroke="#C00000" stroke-width="1.8" marker-end="url(#ar3)"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"><span class="part-tag">第一部分 · 业界知识库应用洞察</span><span>4 / 11</span></div>
+</div>
+</body></html>

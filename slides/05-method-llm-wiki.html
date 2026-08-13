@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="slide">
+  <h1 class="title">2.1 方法一：LLM Wiki（Obsidian / Markdown 知识库）</h1>
+  <div class="subtitle"><b>一句话原理：</b>知识写成互相链接的 Markdown + 一个目录页，Agent 像人查"<b>带目录的手册</b>"——先读目录、再读相关页；知识<b>编译一次、持续保鲜</b>，而非每次查询临时检索合成。（Karpathy 2026.04 规范化，单 gist 5000+ star）</div>
+
+  <div class="body-wrap">
+    <!-- 左：三层架构图 -->
+    <div style="flex:1.05;">
+      <div class="card" style="height:100%;">
+        <div class="card-title"><span class="dot"></span>三层架构 + 三个工作流</div>
+        <svg width="100%" height="425" viewBox="0 0 580 425" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+          <defs>
+            <marker id="ar5" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#C00000"/></marker>
+            <marker id="ab5" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#0000FF"/></marker>
+          </defs>
+          <!-- Layer 3 schema -->
+          <rect x="30" y="14" width="520" height="62" rx="8" fill="#FFF7F7" stroke="#C00000" stroke-width="1.6"/>
+          <text x="50" y="40" font-size="14" font-weight="bold" fill="#C00000">③ Schema 层（CLAUDE.md / AGENTS.md）</text>
+          <text x="50" y="62" font-size="12" fill="#333">定义 wiki 结构约定、页面格式、入库/查询/巡检工作流 —— 把 LLM 变成"守纪律的维基管理员"</text>
+
+          <!-- Layer 2 wiki -->
+          <rect x="30" y="94" width="520" height="150" rx="8" fill="#F0F0FF" stroke="#0000FF" stroke-width="1.6"/>
+          <text x="50" y="120" font-size="14" font-weight="bold" fill="#0000FF">② Wiki 层（LLM 维护的知识页，人只读）</text>
+          <!-- index.md 中心 -->
+          <rect x="230" y="132" width="120" height="42" rx="6" fill="#0000FF"/>
+          <text x="290" y="150" font-size="13" font-weight="bold" fill="#fff" text-anchor="middle">index.md</text>
+          <text x="290" y="167" font-size="10.5" fill="#fff" text-anchor="middle">总目录：链接+一句话摘要</text>
+          <!-- 周边页面 -->
+          <rect x="52" y="138" width="120" height="30" rx="5" fill="#fff" stroke="#9999FF"/><text x="112" y="158" font-size="11.5" text-anchor="middle">概念页 / 术语页</text>
+          <rect x="52" y="188" width="120" height="30" rx="5" fill="#fff" stroke="#9999FF"/><text x="112" y="208" font-size="11.5" text-anchor="middle">实体页 / 模块页</text>
+          <rect x="408" y="138" width="120" height="30" rx="5" fill="#fff" stroke="#9999FF"/><text x="468" y="158" font-size="11.5" text-anchor="middle">决策页(ADR)</text>
+          <rect x="408" y="188" width="120" height="30" rx="5" fill="#fff" stroke="#9999FF"/><text x="468" y="208" font-size="11.5" text-anchor="middle">综述 / 对比 / 坑页</text>
+          <rect x="230" y="192" width="120" height="30" rx="5" fill="#fff" stroke="#9999FF"/><text x="290" y="212" font-size="11.5" text-anchor="middle">log.md 时间线</text>
+          <line x1="172" y1="153" x2="228" y2="153" stroke="#0000FF" stroke-width="1.4" marker-end="url(#ab5)"/>
+          <line x1="406" y1="153" x2="352" y2="153" stroke="#0000FF" stroke-width="1.4" marker-end="url(#ab5)"/>
+          <line x1="172" y1="203" x2="228" y2="207" stroke="#0000FF" stroke-width="1.4" marker-end="url(#ab5)"/>
+          <line x1="406" y1="203" x2="352" y2="207" stroke="#0000FF" stroke-width="1.4" marker-end="url(#ab5)"/>
+
+          <!-- Layer 1 raw -->
+          <rect x="30" y="262" width="520" height="56" rx="8" fill="#F2F2F2" stroke="#999"/>
+          <text x="50" y="288" font-size="14" font-weight="bold">① 原始素材层（不可变）</text>
+          <text x="50" y="308" font-size="12" fill="#555">设计文档 · 会议纪要 · 历史 issue · 代码注释 · 外部资料</text>
+
+          <!-- 工作流 -->
+          <rect x="30" y="340" width="163" height="70" rx="8" fill="#fff" stroke="#C00000" stroke-width="1.4"/>
+          <text x="111" y="362" font-size="13" font-weight="bold" text-anchor="middle" fill="#C00000">入库 Ingest</text>
+          <text x="111" y="382" font-size="11" text-anchor="middle" fill="#555">新素材→更新多个页面</text>
+          <text x="111" y="398" font-size="11" text-anchor="middle" fill="#555">冲突时标注矛盾</text>
+          <rect x="209" y="340" width="163" height="70" rx="8" fill="#fff" stroke="#C00000" stroke-width="1.4"/>
+          <text x="290" y="362" font-size="13" font-weight="bold" text-anchor="middle" fill="#C00000">查询 Query</text>
+          <text x="290" y="382" font-size="11" text-anchor="middle" fill="#555">读 index → 读相关页</text>
+          <text x="290" y="398" font-size="11" text-anchor="middle" fill="#555">两跳可溯源到原始素材</text>
+          <rect x="388" y="340" width="163" height="70" rx="8" fill="#fff" stroke="#C00000" stroke-width="1.4"/>
+          <text x="469" y="362" font-size="13" font-weight="bold" text-anchor="middle" fill="#C00000">巡检 Lint</text>
+          <text x="469" y="382" font-size="11" text-anchor="middle" fill="#555">死链 / 不一致 / 矛盾</text>
+          <text x="469" y="398" font-size="11" text-anchor="middle" fill="#555">定期健康检查</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 右：场景/优劣/工具 -->
+    <div style="flex:0.95;display:flex;flex-direction:column;gap:9px;">
+      <div class="card gray">
+        <div class="card-title"><span class="dot"></span>适用场景</div>
+        <ul class="body-list tight">
+          <li class="small">业务背景、<b>架构决策（ADR）</b>、编码约束、模块职责、坑清单、术语表——所有"<span class="em">需要人评审的高价值知识</span>"</li>
+          <li class="small">知识量在几百页 / 约十万 token 内导航最优</li>
+        </ul>
+      </div>
+      <div style="display:flex;gap:9px;">
+        <div class="card gray" style="flex:1;">
+          <div class="card-title" style="color:#007A33;">✓ 优势</div>
+          <ul class="body-list tight">
+            <li class="small">零基础设施（git 里的文件）</li>
+            <li class="small">人与 Agent 读<b>同一份</b>，可评审/可 diff/可溯源</li>
+            <li class="small">与 agentic search <span class="em">零摩擦</span></li>
+            <li class="small">可解释性最强，改文件即更新</li>
+          </ul>
+        </div>
+        <div class="card gray" style="flex:1;">
+          <div class="card-title" style="color:#B45309;">△ 劣势</div>
+          <ul class="body-list tight">
+            <li class="small">需人工策展纪律，有<b>腐化风险</b></li>
+            <li class="small">不擅长"谁调用谁"等结构性查询</li>
+            <li class="small">几千页后目录导航吃力</li>
+            <li class="small">没写进去的它不知道</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot"></span>代表工具 / 实践</div>
+        <div style="line-height:1.9;">
+          <span class="chip blue">Karpathy llm-wiki 模式</span>
+          <span class="chip">Obsidian + Obsidian Skills</span>
+          <span class="chip">DeepWiki / CodeWiki</span>
+          <span class="chip">microsoft deep-wiki skill</span>
+          <span class="chip">AGENTS.md / CLAUDE.md 分层</span>
+          <span class="chip">OpenSpec specs（活规格）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"><span class="part-tag">第二部分 · 业界知识库方法论及技术洞察</span><span>5 / 11</span></div>
+</div>
+</body></html>
