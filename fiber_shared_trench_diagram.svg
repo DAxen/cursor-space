@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <style>
+      text { font-family: "WenQuanYi Micro Hei", "Noto Sans CJK SC", sans-serif; }
+      .mesh { stroke: #D9E0E7; stroke-width: 2; stroke-dasharray: 6 9; fill: none; }
+      .node-title { font-size: 22px; font-weight: 700; fill: #263238; text-anchor: middle; }
+      .node-sub { font-size: 15px; fill: #607D8B; text-anchor: middle; }
+    </style>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#263238" flood-opacity="0.16"/>
+    </filter>
+    <marker id="arrow-blue" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M1,1 L11,6 L1,11 Z" fill="#1A73E8"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M1,1 L11,6 L1,11 Z" fill="#00A86B"/>
+    </marker>
+  </defs>
+
+  <!-- Pure white canvas -->
+  <rect width="1600" height="1000" fill="#FFFFFF"/>
+
+  <!-- Header -->
+  <text x="80" y="76" font-size="36" font-weight="700" fill="#202124">主备光纤路径共沟风险示意图</text>
+  <text x="80" y="116" font-size="20" fill="#5F6368">两条逻辑独立的保护路径，可能因经过同一段物理沟道而同时失效</text>
+
+  <!-- Legend -->
+  <g transform="translate(1010,52)">
+    <rect width="510" height="82" rx="16" fill="#F8F9FA"/>
+    <line x1="24" y1="28" x2="82" y2="28" stroke="#1A73E8" stroke-width="8" stroke-linecap="round"/>
+    <text x="94" y="35" font-size="18" font-weight="700" fill="#37474F">主路径</text>
+    <line x1="198" y1="28" x2="256" y2="28" stroke="#00A86B" stroke-width="8" stroke-linecap="round"/>
+    <text x="268" y="35" font-size="18" font-weight="700" fill="#37474F">备路径</text>
+    <line x1="372" y1="28" x2="430" y2="28" class="mesh"/>
+    <text x="442" y="35" font-size="18" fill="#607D8B">其他连接</text>
+    <rect x="24" y="52" width="58" height="12" rx="6" fill="#FFF3CD" stroke="#F9AB00" stroke-width="2"/>
+    <text x="94" y="65" font-size="17" fill="#795500">光缆共沟区段</text>
+  </g>
+
+  <!-- Complete graph: every pair of the six nodes has a light connection -->
+  <g aria-label="m¹hTÓQ">
+    <!-- S to all -->
+    <path class="mesh" d="M170 500 L455 285"/>
+    <path class="mesh" d="M170 500 L455 715"/>
+    <path class="mesh" d="M170 500 L1095 285"/>
+    <path class="mesh" d="M170 500 L1095 715"/>
+    <path class="mesh" d="M170 500 L1430 500"/>
+    <!-- A to later nodes -->
+    <path class="mesh" d="M455 285 L455 715"/>
+    <path class="mesh" d="M455 285 L1095 285"/>
+    <path class="mesh" d="M455 285 L1095 715"/>
+    <path class="mesh" d="M455 285 L1430 500"/>
+    <!-- B to later nodes -->
+    <path class="mesh" d="M455 715 L1095 285"/>
+    <path class="mesh" d="M455 715 L1095 715"/>
+    <path class="mesh" d="M455 715 L1430 500"/>
+    <!-- C to later nodes -->
+    <path class="mesh" d="M1095 285 L1095 715"/>
+    <path class="mesh" d="M1095 285 L1430 500"/>
+    <!-- D to T -->
+    <path class="mesh" d="M1095 715 L1430 500"/>
+  </g>
+
+  <!-- Shared physical trench -->
+  <g filter="url(#shadow)">
+    <rect x="585" y="410" width="390" height="180" rx="28" fill="#FFF8E1" stroke="#F9AB00" stroke-width="4"/>
+  </g>
+  <path d="M615 438 L945 438" stroke="#F9AB00" stroke-width="3" stroke-dasharray="10 8"/>
+  <path d="M615 562 L945 562" stroke="#F9AB00" stroke-width="3" stroke-dasharray="10 8"/>
+  <text x="780" y="400" font-size="20" font-weight="700" fill="#9A6700" text-anchor="middle">同一段物理光缆沟道</text>
+
+  <!-- Main route -->
+  <path d="M170 500 L455 285 L610 470 L950 470 L1095 285 L1430 500"
+        fill="none" stroke="#FFFFFF" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M170 500 L455 285 L610 470 L950 470 L1095 285 L1430 500"
+        fill="none" stroke="#1A73E8" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"
+        marker-end="url(#arrow-blue)"/>
+
+  <!-- Backup route -->
+  <path d="M170 500 L455 715 L610 530 L950 530 L1095 715 L1430 500"
+        fill="none" stroke="#FFFFFF" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M170 500 L455 715 L610 530 L950 530 L1095 715 L1430 500"
+        fill="none" stroke="#00A86B" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"
+        marker-end="url(#arrow-green)"/>
+
+  <!-- Fiber labels within trench -->
+  <rect x="665" y="447" width="230" height="42" rx="21" fill="#E8F0FE"/>
+  <circle cx="690" cy="468" r="7" fill="#1A73E8"/>
+  <text x="708" y="475" font-size="18" font-weight="700" fill="#174EA6">主路径光纤 A—C</text>
+  <rect x="665" y="511" width="230" height="42" rx="21" fill="#E6F4EA"/>
+  <circle cx="690" cy="532" r="7" fill="#00A86B"/>
+  <text x="708" y="539" font-size="18" font-weight="700" fill="#087F5B">备路径光纤 B—D</text>
+
+  <!-- Route tags -->
+  <g transform="translate(270,326)">
+    <rect width="130" height="44" rx="22" fill="#1A73E8"/>
+    <text x="65" y="29" font-size="20" font-weight="700" fill="#FFFFFF" text-anchor="middle">主路径</text>
+  </g>
+  <g transform="translate(270,630)">
+    <rect width="130" height="44" rx="22" fill="#00A86B"/>
+    <text x="65" y="29" font-size="20" font-weight="700" fill="#FFFFFF" text-anchor="middle">备路径</text>
+  </g>
+
+  <!-- Nodes -->
+  <g filter="url(#shadow)">
+    <g transform="translate(170,500)">
+      <circle r="64" fill="#E8F0FE" stroke="#1A73E8" stroke-width="5"/>
+      <circle r="29" fill="#1A73E8"/>
+      <path d="M-12 -4 H8 M2 -12 L12 -4 L2 4" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <g transform="translate(455,285)">
+      <circle r="56" fill="#FFFFFF" stroke="#90A4AE" stroke-width="4"/>
+      <rect x="-22" y="-19" width="44" height="38" rx="8" fill="#546E7A"/>
+      <circle cx="-10" cy="0" r="4" fill="#B2DFDB"/><circle cx="3" cy="0" r="4" fill="#B2DFDB"/><circle cx="16" cy="0" r="4" fill="#B2DFDB"/>
+    </g>
+    <g transform="translate(455,715)">
+      <circle r="56" fill="#FFFFFF" stroke="#90A4AE" stroke-width="4"/>
+      <rect x="-22" y="-19" width="44" height="38" rx="8" fill="#546E7A"/>
+      <circle cx="-10" cy="0" r="4" fill="#B2DFDB"/><circle cx="3" cy="0" r="4" fill="#B2DFDB"/><circle cx="16" cy="0" r="4" fill="#B2DFDB"/>
+    </g>
+    <g transform="translate(1095,285)">
+      <circle r="56" fill="#FFFFFF" stroke="#90A4AE" stroke-width="4"/>
+      <rect x="-22" y="-19" width="44" height="38" rx="8" fill="#546E7A"/>
+      <circle cx="-10" cy="0" r="4" fill="#B2DFDB"/><circle cx="3" cy="0" r="4" fill="#B2DFDB"/><circle cx="16" cy="0" r="4" fill="#B2DFDB"/>
+    </g>
+    <g transform="translate(1095,715)">
+      <circle r="56" fill="#FFFFFF" stroke="#90A4AE" stroke-width="4"/>
+      <rect x="-22" y="-19" width="44" height="38" rx="8" fill="#546E7A"/>
+      <circle cx="-10" cy="0" r="4" fill="#B2DFDB"/><circle cx="3" cy="0" r="4" fill="#B2DFDB"/><circle cx="16" cy="0" r="4" fill="#B2DFDB"/>
+    </g>
+    <g transform="translate(1430,500)">
+      <circle r="64" fill="#F3E8FD" stroke="#8E24AA" stroke-width="5"/>
+      <circle r="29" fill="#8E24AA"/>
+      <path d="M-8 -12 L4 0 L-8 12 M4 -12 L16 0 L4 12" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <!-- Node labels -->
+  <text class="node-title" x="170" y="588">起点 S</text>
+  <text class="node-sub" x="170" y="614">业务发送端</text>
+  <text class="node-title" x="455" y="217">节点 A</text>
+  <text class="node-sub" x="455" y="242">主路由中继</text>
+  <text class="node-title" x="455" y="798">节点 B</text>
+  <text class="node-sub" x="455" y="824">备路由中继</text>
+  <text class="node-title" x="1095" y="217">节点 C</text>
+  <text class="node-sub" x="1095" y="242">主路由中继</text>
+  <text class="node-title" x="1095" y="798">节点 D</text>
+  <text class="node-sub" x="1095" y="824">备路由中继</text>
+  <text class="node-title" x="1430" y="588">宿点 T</text>
+  <text class="node-sub" x="1430" y="614">业务接收端</text>
+
+  <!-- Failure warning and explanatory footer -->
+  <g transform="translate(80,868)">
+    <rect width="1440" height="92" rx="20" fill="#FCE8E6"/>
+    <circle cx="50" cy="46" r="26" fill="#D93025"/>
+    <path d="M50 28 V49 M50 61 V64" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round"/>
+    <text x="94" y="40" font-size="23" font-weight="700" fill="#A50E0E">风险：沟道被挖断 → 主路径与备路径光纤同时中断 → 保护切换失效，业务可能中断</text>
+    <text x="94" y="70" font-size="17" fill="#7F1D1D">共沟检测通过同步比对两根光纤的信号特征，在故障前识别物理路由重合隐患。</text>
+  </g>
+</svg>
