@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>光产品线软件平台技术专家答辩</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#d9d9d9;font-family:"Microsoft YaHei","Noto Sans CJK SC",Arial,sans-serif;color:#111}
+.slide{width:1600px;height:900px;background:#fff;position:relative;overflow:hidden;padding:35px 56px 34px;display:none}
+.slide.active{display:block}.head{height:82px;border-bottom:2px solid #c00000;position:relative}.head h1{margin:0;color:#c00000;font-size:32px;line-height:40px;font-weight:800}.sub{margin-top:8px;height:29px;line-height:29px;padding:0 14px;background:#f2f2f2;font-size:18px;font-weight:600}.page{position:absolute;right:56px;top:43px;color:#888;font-weight:700}.foot{position:absolute;bottom:13px;left:56px;right:56px;border-top:1px solid #ddd;padding-top:7px;font-size:12px;color:#777;display:flex;justify-content:space-between}
+.content{height:730px;padding-top:16px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.card{border:1px solid #d6d6d6;border-top:5px solid #c00000;border-radius:3px;background:#fff;padding:13px 16px;box-shadow:0 2px 8px #00000012}.card h2{font-size:19px;margin:0 0 9px;color:#c00000}.card h3{font-size:16px;margin:0 0 7px}.card p{font-size:14px;line-height:1.55;margin:4px 0}.card ul{padding-left:18px;margin:5px 0}.card li{font-size:14px;line-height:1.48;margin:3px 0}.blue{color:#00f;font-weight:700}.red{color:#c00000;font-weight:700}.muted{color:#666}.tag{display:inline-block;color:#fff;background:#c00000;border-radius:12px;padding:3px 9px;font-size:12px;margin-right:6px}.tag.b{background:#275dad}.tag.g{background:#36845c}.tag.o{background:#d8751f}.banner{background:#f2f2f2;border-left:7px solid #c00000;padding:10px 16px;font-size:18px;font-weight:700;margin-bottom:13px}.kpi{font-size:29px;color:#c00000;font-weight:800}.tiny{font-size:12px!important}.center{text-align:center}.arrow{color:#c00000;font-size:26px;font-weight:900;text-align:center}.pill{border:1px solid #c00000;color:#c00000;border-radius:18px;padding:5px 10px;font-weight:700;display:inline-block}.quote{font-size:18px;line-height:1.65;border-left:5px solid #c00000;padding:10px 16px;background:#fafafa}
+table{border-collapse:collapse;width:100%;font-size:13px}th{background:#c00000;color:#fff;padding:8px;border:1px solid #d5d5d5}td{border:1px solid #d5d5d5;padding:7px 9px;vertical-align:top;line-height:1.38}tr:nth-child(even) td{background:#fafafa}
+.flow{display:flex;align-items:center;justify-content:center;gap:9px}.node{border:2px solid #c00000;background:#fff;padding:11px 12px;text-align:center;font-weight:700;min-width:120px}.node.soft{border-color:#888;background:#f2f2f2}.node.bluebox{border-color:#275dad;background:#edf3ff}.connector{font-size:25px;color:#c00000;font-weight:bold}.section-title{font-size:19px;color:#c00000;font-weight:800;border-bottom:1px solid #c00000;padding-bottom:6px;margin-bottom:8px}.ribbon{position:absolute;right:-55px;top:22px;background:#c00000;color:white;padding:7px 70px;transform:rotate(35deg);font-size:12px}
+.timeline{position:relative;padding-left:28px}.timeline:before{content:"";position:absolute;left:8px;top:5px;bottom:5px;width:3px;background:#c00000}.event{position:relative;margin:0 0 10px}.event:before{content:"";position:absolute;left:-25px;top:4px;width:11px;height:11px;border-radius:50%;background:#c00000}.event b{font-size:14px}.event span{font-size:13px;color:#555}
+.architecture{border:1px solid #bbb;padding:11px;background:linear-gradient(180deg,#fff,#fafafa)}.layer{border:2px solid #c00000;margin:8px 0;padding:10px;display:flex;align-items:center;gap:9px}.layer-title{width:145px;color:#c00000;font-weight:800}.module{flex:1;background:#f2f2f2;border:1px solid #bbb;padding:8px;text-align:center;font-size:13px;font-weight:700}
+.metric-row{display:flex;gap:10px}.metric{flex:1;text-align:center;border:1px solid #ddd;padding:10px;background:#fafafa}.metric small{display:block;color:#555;font-size:12px}
+.matrix{display:grid;grid-template-columns:130px repeat(4,1fr);gap:4px}.matrix>div{padding:9px;border:1px solid #ddd;font-size:13px}.matrix .mh{background:#c00000;color:white;font-weight:bold;text-align:center}.matrix .ml{font-weight:bold;background:#f2f2f2}
+</style>
+</head>
+<body>
+
+<section class="slide" id="p1">
+ <div class="head"><h1>竞聘专家业绩评价与工作简历</h1><div class="sub">高圣阳 / 00527088｜从架构到生态的软件平台构建者</div></div><div class="page">01 / 14</div>
+ <div class="content grid2" style="grid-template-columns:1.08fr .92fr">
+  <div>
+   <div class="section-title">核心业绩｜四条主线</div>
+   <div class="card" style="margin-bottom:10px"><h2>01 架构竞争力构筑</h2><p><span class="blue">OH认证 0→1→N</span>：首台FTTR通过认证并沉淀批量认证能力；SDC落地OH基础底座；FTTR落地统一互联控制中枢目标架构。</p></div>
+   <div class="card" style="margin-bottom:10px"><h2>02 CMC运作与工程治理</h2><p>两部门CMC运作；辅导<span class="blue">金码2名、十佳Committer 3名</span>；DTE组织、WorkOrder/DTDP工具与规范体系建设。</p></div>
+   <div class="grid2" style="gap:10px">
+    <div class="card"><h2>03 AI先进生产力</h2><p>Skill体系治理、OKL知识工程、AI编码质量四层防护网。</p></div>
+    <div class="card"><h2>04 知识传承</h2><p>Committer训战、Mini2.0-C++、DT实战课程；ICT大会分享；联合IESE评估。</p></div>
+   </div>
+   <div class="section-title" style="margin-top:13px">个人荣誉｜2023 高密度成果年</div>
+   <div class="metric-row">
+    <div class="metric"><span class="kpi">5</span><small>项关键荣誉</small></div>
+    <div class="metric"><b>CMC大会</b><small>优秀个人</small></div>
+    <div class="metric"><b>总裁奖</b><small>技术竞争力与卓越交付</small></div>
+    <div class="metric"><b>武研×2</b><small>工程能力 / 软件文化</small></div>
+   </div>
+  </div>
+  <div>
+   <div class="section-title">14年职业轨迹｜从核心开发到平台架构</div>
+   <div class="timeline">
+    <div class="event"><b>2025—2026｜软件平台部</b><br><span>CMC运作、AI先进生产力、Skill与知识工程</span></div>
+    <div class="event"><b>2024—2025｜光启Lite平台软件架构师</b><br><span>OH基础底座与统一互联中枢架构</span></div>
+    <div class="event"><b>2021—2024｜AI应用软件专家</b><br><span>光纤传感核心特性、AIE架构设计</span></div>
+    <div class="event"><b>2019—2020｜AI应用开发部CMC主任</b><br><span>CMC与DT能力建设、Committer训战</span></div>
+    <div class="event"><b>2014—2018｜综合传送核心开发 / PL</b><br><span>OSN9800 / OSN1800保护特性交付</span></div>
+    <div class="event"><b>2011—2013｜PTN软件核心开发</b><br><span>PTN保护MPLS / 环网特性交付</span></div>
+   </div>
+   <div class="banner" style="margin-top:8px">任职能力：架构设计落地 × 工程治理 × 技术影响力</div>
+   <p class="tiny"><b>改进点：</b>拓宽软件平台全领域架构视野，深化AI治理体系化。</p>
+  </div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>业绩与简历</span></div>
+</section>
+
+<section class="slide" id="p2">
+ <div class="head"><h1>个人简历 — 优势与不足</h1><div class="sub">优势形成闭环：技术根基 → 业务视野 → 工程治理 → AI新范式</div></div><div class="page">02 / 14</div>
+ <div class="content">
+  <div class="grid4">
+   <div class="card"><h2>技术根基</h2><div class="kpi">14年</div><p><b>古法编程爱好者</b><br>C/C++ / Python / CMake / Shell；疑难问题“定海神针”。</p><p><span class="blue">OH技术栈0→1</span><br>统一互联中枢跨2年多版本落地。</p></div>
+   <div class="card"><h2>业务视野</h2><p><b>端—边—云广度</b><br>AI、DCN、TACACS+、D3A、PTN/OSN、FTTR、SDC。</p><p><b>客户一线</b><br>南网电鸿、移动杭研、电信数生、江苏移动517演示。</p></div>
+   <div class="card"><h2>工程治理</h2><div class="kpi">4年</div><p>连续涌现十佳Committer与金码奖。</p><p><span class="blue">DT覆盖率 60%+</span><br>DTE组织与工具建设，PDU名列前茅。</p></div>
+   <div class="card"><h2>AI先进生产力</h2><p>Skill治理、OKL、四层防护网。</p><p><b>亲自践行</b><br>AI辅助星闪协议仿真0→1；Agent互联底座“需求→方案”全流程。</p></div>
+  </div>
+  <div class="section-title" style="margin-top:18px">五项不足｜以问题清单牵引下一阶段成长</div>
+  <div class="flow" style="align-items:stretch">
+   <div class="node soft"><span class="red">01</span><br>全领域架构视野<br><small>拓展ASON / 智能平台</small></div><div class="connector">→</div>
+   <div class="node soft"><span class="red">02</span><br>AI治理体系化<br><small>从起步走向可演进</small></div><div class="connector">→</div>
+   <div class="node soft"><span class="red">03</span><br>跨产品线影响力<br><small>向公司级扩展</small></div><div class="connector">→</div>
+   <div class="node soft"><span class="red">04</span><br>系统性思维<br><small>规划—部署—落地</small></div><div class="connector">→</div>
+   <div class="node soft"><span class="red">05</span><br>梯队培养<br><small>规范化、资产化、传承</small></div>
+  </div>
+  <div class="quote" style="margin-top:20px"><b>自我定位：</b>既能把“纸和笔”变成软件，也能把个人经验变成组织资产；下一步要把<span class="blue">单点优势升级为平台级、体系化能力</span>。</div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>个人画像</span></div>
+</section>
+
+<section class="slide" id="p3">
+ <div class="head"><h1>成功实践案例总览 — 双线并进</h1><div class="sub">业务牵引能力建设，能力反哺业务竞争力</div></div><div class="page">03 / 14</div>
+ <div class="content" style="padding-top:30px">
+  <div class="grid2" style="gap:30px">
+   <div class="card" style="height:500px;border-top-width:9px">
+    <div class="tag">业务线</div><h2 style="font-size:25px;margin-top:14px">基于OH生态提升边端系列产品竞争力</h2>
+    <div class="flow" style="margin:32px 0 24px"><div class="node">0→1<br><small>OH基础底座</small></div><div class="connector">→</div><div class="node">1→N<br><small>统一互联中枢</small></div><div class="connector">→</div><div class="node">AI2H<br><small>主动服务</small></div></div>
+    <ul><li>构建OH鸿蒙基础底座，支撑<span class="blue">SDC路鸿首次商用</span></li><li>主导统一互联中枢落地，FTTR升级为家庭IoT控制中枢</li><li>演进1+1+N：Agent互联底座 + 生态数据总线</li></ul>
+    <div class="banner" style="margin-top:30px">详见案例一｜P4—P5</div>
+   </div>
+   <div class="card" style="height:500px;border-top-width:9px;border-top-color:#275dad">
+    <div class="tag b">能力建设线</div><h2 style="font-size:25px;margin-top:14px;color:#275dad">借助CMC运作提升软件氛围与能力</h2>
+    <div class="flow" style="margin:32px 0 24px"><div class="node bluebox">数字化<br><small>TENET / 工具</small></div><div class="connector">+</div><div class="node bluebox">激活<br><small>Committer</small></div><div class="connector">+</div><div class="node bluebox">筑基<br><small>DT能力</small></div></div>
+    <ul><li>从AI应用开发部CMC主任到软件平台部CMC运作</li><li>数字化赋能、Committer激活、DT能力建设三管齐下</li><li>机制、工具、规范、课程形成治理闭环</li></ul>
+    <div class="banner" style="margin-top:30px;border-left-color:#275dad">详见案例二｜P6</div>
+   </div>
+  </div>
+  <div class="flow" style="margin-top:22px"><div class="pill">业务挑战定义能力缺口</div><div class="connector">⇄</div><div class="pill">工程能力保障架构落地</div><div class="connector">⇄</div><div class="pill">组织资产支撑持续演进</div></div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>成功实践总览</span></div>
+</section>
+
+<section class="slide" id="p4">
+ <div class="head"><h1>成功实践案例一 — OH统一互联中枢架构（1/2）</h1><div class="sub">从0到1构建光产品线边端生态底座：问题驱动架构演进</div></div><div class="page">04 / 14</div>
+ <div class="content grid2" style="grid-template-columns:.83fr 1.17fr">
+  <div>
+   <div class="card"><h2>挑战｜产业X鸿对接，技术栈从无到有</h2><p><b>SDC：</b>需对接路鸿 / 电鸿，光产品线无OH积累。</p><p><b>FTTR：</b>需从纯连接网关升级为家庭IoT控制中枢。</p></div>
+   <div class="card" style="margin-top:12px"><h2>个人关键贡献</h2><ul><li>从0到1完成OH技术栈积累</li><li>蓝牙协议栈打通FTTR与OH软总线</li><li>引入<span class="blue">11个OH基础组件</span></li><li>支撑SDC路鸿场景首次商用</li></ul></div>
+   <div class="card" style="margin-top:12px"><h2>价值产出</h2><div class="metric-row"><div class="metric"><span class="kpi">25A</span><small>光启Lite方案落地</small></div><div class="metric"><span class="kpi">2类</span><small>FTTR / SDC赋能</small></div></div></div>
+  </div>
+  <div>
+   <div class="section-title">OH鸿蒙基础底座架构</div>
+   <div class="architecture">
+    <div class="layer"><div class="layer-title">业务生态</div><div class="module">SDC 路鸿 / 电鸿</div><div class="module">FTTR 家庭IoT</div></div>
+    <div class="arrow">↕</div>
+    <div class="layer"><div class="layer-title">X鸿集成框架</div><div class="module">生态适配</div><div class="module">产品集成</div><div class="module">认证能力</div></div>
+    <div class="layer"><div class="layer-title">OH通信代理</div><div class="module">软总线代理</div><div class="module">蓝牙协议栈</div><div class="module">设备发现</div></div>
+    <div class="layer"><div class="layer-title">基础底座</div><div class="module">LXC轻量容器</div><div class="module">11个OH裁剪组件</div></div>
+   </div>
+   <div class="section-title" style="margin-top:14px">成功DNA｜可复制的方法</div>
+   <div class="grid3">
+    <div class="card"><h2>前瞻性</h2><p>每次架构决策预留下一阶段扩展空间。</p></div>
+    <div class="card"><h2>版本节奏</h2><p>23B认证 → 24B试点 → 25A底座 → 25B AI → 26A Agent。</p></div>
+    <div class="card"><h2>跨域协同</h2><p>光 / 数通 / 云核共建，协同海思与运营商。</p></div>
+   </div>
+  </div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>案例一：OH底座</span></div>
+</section>
+
+<section class="slide" id="p5">
+ <div class="head"><h1>成功实践案例一 — OH统一互联中枢架构（2/2）</h1><div class="sub">面向AI2H：从“设备互联”演进到“空间AI智能体主动服务”</div></div><div class="page">05 / 14</div>
+ <div class="content">
+  <div class="grid2" style="grid-template-columns:1.12fr .88fr">
+   <div>
+    <div class="section-title">三层统一互联控制中枢｜解多协议、多生态、多运营商复杂度</div>
+    <div class="architecture">
+     <div class="layer"><div class="layer-title">北向｜云服务</div><div class="module">运营商平台</div><div class="module">家庭IoT助手</div><div class="module">LinkHome App</div></div>
+     <div class="layer" style="background:#fff4f4"><div class="layer-title">中枢｜统一控制</div><div class="module">统一设备对象模型</div><div class="module">控制总线</div><div class="module">数据总线 VTP</div></div>
+     <div class="layer"><div class="layer-title">南向｜生态设备</div><div class="module">Wi-Fi</div><div class="module">蓝牙</div><div class="module">星闪</div><div class="module">红外 / Matter</div></div>
+    </div>
+    <div class="banner" style="margin-top:13px">25A成果：语音控制IoT · LinkHome控制星闪设备 · CSI联动节能</div>
+   </div>
+   <div class="card"><h2>挑战三｜AI2H主动服务</h2><p><b>1 + 1 + N 整体架构</b></p>
+    <div class="flow" style="margin:14px 0"><div class="node">1<br><small>家庭IoT助手</small></div><div class="connector">+</div><div class="node">1<br><small>控制中枢</small></div><div class="connector">+</div><div class="node">N<br><small>家庭生态</small></div></div>
+    <ul><li><b>Agent互联：</b>节点网关统一Node模型，Agent自主控制IoT</li><li><b>生态数据总线：</b>VTP跨设备音视频 / 文件流转</li><li><b>硬件虚拟化：</b>摄像头、门铃、中屏虚拟为外设</li><li><b>标准对接：</b>GIIC 2.0 / Matter / X-Link / 国强标</li></ul>
+   </div>
+  </div>
+  <div class="section-title" style="margin-top:18px">持续演进路线｜架构不是终点，而是版本化生长</div>
+  <div class="flow"><div class="node soft"><b>2024</b><br>OH底座</div><div class="connector">→</div><div class="node"><b>25A</b><br>鸿蒙中枢</div><div class="connector">→</div><div class="node"><b>26A</b><br>Agent互联 + 数据总线</div><div class="connector">→</div><div class="node soft"><b>标准</b><br>GIIC智家2.0立项</div><div class="connector">→</div><div class="node soft"><b>27B</b><br>国强标兼容</div></div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>案例一：AI2H演进</span></div>
+</section>
+
+<section class="slide" id="p6">
+ <div class="head"><h1>成功实践案例二 — CMC运作</h1><div class="sub">数字化赋能、Committer激活与DT能力建设：机制 × 工具 × 文化</div></div><div class="page">06 / 14</div>
+ <div class="content">
+  <div class="grid3">
+   <div class="card"><h2>数字化赋能</h2><p>TENET架构数字化平台：人工审视 → <span class="blue">自动化MR级架构看护</span>。</p><p>DTE融入CMC“一张皮”，例会跟踪DT，与门禁 / 重构 / 质量闭环。</p></div>
+   <div class="card"><h2>Committer激活</h2><p>角色认知 + Clean Code训战；CMC大会奖项、月度优秀Committer、讲师荣誉。</p><p><span class="blue">连续四年</span>涌现十佳Committer与金码奖。</p></div>
+   <div class="card"><h2>DT能力建设</h2><p>DTE组织、沙盘机制、可测试性评估、WorkOrder-C录制回放、DTDP图形化设计。</p><p>规范、课程、夜校、IPD流程全覆盖。</p></div>
+  </div>
+  <div class="grid2" style="margin-top:15px">
+   <div>
+    <div class="section-title">组织融合｜Before → After</div>
+    <div class="flow">
+     <div class="node soft"><b>Before</b><br><small>DTE独立运作<br>专项与治理割裂</small></div><div class="connector">→</div>
+     <div class="node"><b>After</b><br><small>CMC正式任命<br>事务同盘、质量闭环</small></div>
+    </div>
+    <div class="section-title" style="margin-top:18px">工程工具链</div>
+    <div class="flow"><div class="node bluebox">生产数据<br>录制</div><div class="connector">→</div><div class="node bluebox">WorkOrder-C<br>回放打桩</div><div class="connector">→</div><div class="node bluebox">DTDP<br>脑图设计</div><div class="connector">→</div><div class="node bluebox">自动生成<br>代码模板</div></div>
+   </div>
+   <div>
+    <div class="section-title">沉淀为可复用资产</div>
+    <table><tr><th>类型</th><th>代表成果</th><th>价值</th></tr>
+     <tr><td>规范</td><td>C++ DT编程规范、DT CleanCode指导书</td><td>统一判据</td></tr>
+     <tr><td>课程</td><td>开发者测试与可测试性、Committer训战</td><td>公司级传播</td></tr>
+     <tr><td>工具</td><td>WorkOrder-C、DTDP、TENET</td><td>降低门槛</td></tr>
+     <tr><td>生态</td><td>HDT社区、DT夜校、IPD12.1</td><td>持续运转</td></tr>
+    </table>
+   </div>
+  </div>
+  <div class="banner" style="margin-top:16px">成功DNA：工具替代人治｜组织打破壁垒｜激励点燃热情</div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>案例二：CMC与DT</span></div>
+</section>
+
+<section class="slide" id="p7">
+ <div class="head"><h1>拟聘岗位职责的认识 — 四能力域自评</h1><div class="sub">专家价值：把技术判断、工程经验与组织能力沉淀为平台长期竞争力</div></div><div class="page">07 / 14</div>
+ <div class="content">
+  <div class="matrix">
+   <div class="mh">能力域</div><div class="mh">岗位要求</div><div class="mh">我的认识</div><div class="mh">胜任证据</div><div class="mh">任上升级</div>
+   <div class="ml">软件架构<br>与代码能力</div><div>标准代码、坏味道审核、精通2门+语言</div><div>能写、能审，更要把架构约束固化为原则与规范</div><div>14年编码；OH中枢 / AIE架构落地</div><div class="blue">质量守门员 + 架构治理推动者</div>
+   <div class="ml">AI先进生产力<br>与工程工具</div><div>AI辅助开发、工具优化、趋势掌握</div><div>把编码经验转化为skill / prompt / rule</div><div>Skill治理、OKL、四层防护网</div><div class="blue">让平台可被AI理解 / 演进 / 复用</div>
+   <div class="ml">Committer运作<br>与团队管理</div><div>激活团队、质量氛围、事成人爽</div><div>从写码 / 检视者升级为核心代码与工程底座贡献者</div><div>两部门CMC；连续4年奖项；DT体系</div><div class="blue">最懂编码 + 最懂业务架构</div>
+   <div class="ml">业界洞察<br>与快速学习</div><div>洞察趋势，带队持续提升</div><div>洞察必须转化为平台技术突破</div><div>TENET、WorkOrder-C、GIIC 2.0、Agent底座</div><div class="blue">季度雷达 + 突破转化台账</div>
+  </div>
+  <div class="section-title" style="margin-top:18px">AI时代的“中间地带”共识</div>
+  <div class="grid4">
+   <div class="card"><h2>Linus</h2><p>可以用AI，但必须理解并为每一行代码负责。</p></div>
+   <div class="card"><h2>Karpathy</h2><p>专业开发走向agentic engineering：边界、验收、人工审查。</p></div>
+   <div class="card"><h2>Osmani</h2><p>警惕AI吞掉junior练习场，形成未来梯队断层。</p></div>
+   <div class="card"><h2>业界数据</h2><p>关键度越高AI使用越低；<span class="blue">96%</span>不完全信任AI代码。</p></div>
+  </div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>岗位认识</span></div>
+</section>
+
+<section class="slide" id="p8">
+ <div class="head"><h1>让智能平台成为 AI 时代的软件与工程范本</h1><div class="sub">支撑光产业软件竞争力持续领先</div></div><div class="page">08 / 14</div>
+ <div class="content grid2" style="grid-template-columns:1.12fr .88fr">
+  <div>
+   <div class="architecture" style="padding:18px">
+    <div class="node" style="width:100%;font-size:20px;background:#fff4f4">愿景｜AI时代的软件与工程范本</div>
+    <div class="arrow">↓ 拆解为四个关键子目标</div>
+    <div class="grid4">
+     <div class="node">架构技术先进</div><div class="node">工程能力先进</div><div class="node">可被AI理解</div><div class="node">能力持续传承</div>
+    </div>
+    <div class="arrow">↓</div>
+    <div class="grid4">
+     <div class="node bluebox">架构看护</div><div class="node bluebox">CMC运作</div><div class="node bluebox">AI先进生产力</div><div class="node bluebox">团队赋能</div>
+    </div>
+    <div class="flow" style="margin-top:20px"><div class="node soft">业界洞察｜持续催化</div><div class="connector">↗</div><div class="pill">洞察 → 突破转化</div></div>
+   </div>
+   <div class="quote" style="margin-top:16px"><b>时代背景：</b>AI编码效率爆发 <span class="red">VS</span> 代码质量治理手段滞后——四条工作思路缺一不可。</div>
+  </div>
+  <div>
+   <div class="card"><h2>四条牵引关系</h2>
+    <p><b>架构看护：</b>核心技术突破决定平台上限</p>
+    <p><b>CMC运作：</b>机制取代人治，守住工程底线</p>
+    <p><b>AI先进生产力：</b>把经验变成AI可消费资产</p>
+    <p><b>团队赋能：</b>Committer承载四属性，能力可传承</p>
+   </div>
+   <div class="card" style="margin-top:14px"><h2>底层原则</h2><div class="grid2"><div class="pill center">机制取代人治</div><div class="pill center">资产沉淀经验</div><div class="pill center">AI催化生产力</div><div class="pill center">结果导向</div></div></div>
+   <div class="card" style="margin-top:14px;background:#fff4f4"><h2>最终目标｜双重范本</h2><p><b>平台：</b>可被业界借鉴的软件与工程实践样本</p><p><b>组织：</b>经验资产化，能力可累积、可传承</p></div>
+  </div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>工作思路总览</span></div>
+</section>
+
+<section class="slide" id="p9">
+ <div class="head"><h1>工作开展思路（一）— 软件架构看护</h1><div class="sub">子目标：新架构拉高上限 + 存量架构守住底线</div></div><div class="page">09 / 14</div>
+ <div class="content">
+  <div class="banner">保障软件平台部软件架构持续演进、减缓腐化、竞争力持续领先</div>
+  <div class="grid2">
+   <div class="card"><h2>新架构要领先｜目标架构突破</h2><p>复制OH统一互联中枢“目标架构驱动 + 版本节奏落地”的成功经验，深入<span class="blue">ASON、智能平台</span>等关键领域。</p>
+    <div class="flow" style="margin:20px 0"><div class="node">25A<br>中枢落地</div><div class="connector">→</div><div class="node">26A<br>Agent + 总线</div><div class="connector">→</div><div class="node">复制<br>关键平台</div></div>
+    <div class="section-title">五个竞争力方向</div>
+    <div class="flow"><span class="pill">小型化</span><span class="pill">弹性高可靠</span><span class="pill">敏捷交付</span><span class="pill">极致性能</span><span class="pill">开放生态</span></div>
+   </div>
+   <div class="card"><h2>存量架构要守住｜技术债务机制</h2>
+    <div class="flow"><div class="node soft">痛点台账</div><div class="connector">→</div><div class="node soft">CMC评估</div><div class="connector">→</div><div class="node soft">版本项 / 技术债窗口</div><div class="connector">→</div><div class="node soft">归档留痕</div></div>
+    <ul><li>每季 <span class="blue">≥ 3项</span> 痛点转化为版本项</li><li>接口演进：先 deprecate 再 break；CI告警</li><li>重构补丁台账与代码一致率 <span class="blue">100%</span></li><li>非平凡变更强制ADR；“不做”则关闭关联议题</li></ul>
+   </div>
+  </div>
+  <div class="grid3" style="margin-top:17px">
+   <div class="metric"><span class="kpi">上限</span><small>新架构技术突破</small></div><div class="metric"><span class="kpi">机制</span><small>决策有据、演进可控</small></div><div class="metric"><span class="kpi">底线</span><small>存量减缓腐化</small></div>
+  </div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>架构看护</span></div>
+</section>
+
+<section class="slide" id="p10">
+ <div class="head"><h1>工作开展思路（二）— CMC运作</h1><div class="sub">子目标：工程能力先进——机制取代人治，工程能力持续领先</div></div><div class="page">10 / 14</div>
+ <div class="content">
+  <div class="section-title">Committer角色再定义｜三项新职责</div>
+  <div class="grid3">
+   <div class="card center"><div class="kpi">01</div><h2>核心代码贡献者</h2><p>贡献核心技术与代码，推动架构先进性。</p></div>
+   <div class="card center"><div class="kpi">02</div><h2>工程底座构筑者</h2><p>经验沉淀为门禁、判据、准则、ADR。</p></div>
+   <div class="card center"><div class="kpi">03</div><h2>AI生产力引擎</h2><p>经验转化为skill / prompt / rule。</p></div>
+  </div>
+  <div class="section-title" style="margin-top:18px">十大事务线革新｜关键四条</div>
+  <table><tr><th style="width:18%">事务线</th><th style="width:42%">机制升级</th><th>预期变化</th></tr>
+   <tr><td><b>工程底座构筑</b></td><td>verify机械化门禁 + 大PR Hard caps + DT质量四档required门禁</td><td>规则从“写在文档”到“跑在CI”</td></tr>
+   <tr><td><b>代码巡检</b></td><td>AI分诊候选问题；Committer确认 / 拒绝 / 纳入重构</td><td>人对人 → <span class="blue">AI对人 + 人对决策</span></td></tr>
+   <tr><td><b>运作纪律</b></td><td>One home per fact；分支数 / 持证情况机器看护</td><td>单一事实源，例行跟踪机械化</td></tr>
+   <tr><td><b>业界洞察</b></td><td>季度技术雷达 + 洞察→突破台账；对标Harness / OpenClaw / HomeAssistant</td><td>外部先进能力持续注入</td></tr>
+  </table>
+  <div class="flow" style="margin-top:18px"><div class="node">例行运作<br><small>产出规范 / 知识</small></div><div class="connector">→</div><div class="node">工具固化<br><small>可机器化部分</small></div><div class="connector">→</div><div class="node">提效反哺<br><small>运作持续升级</small></div><div class="connector">↺</div></div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>CMC运作</span></div>
+</section>
+
+<section class="slide" id="p11">
+ <div class="head"><h1>工作开展思路（三）— AI先进生产力</h1><div class="sub">子目标：平台可被AI理解 / 演进 / 复用——把编码经验变成AI生产力</div></div><div class="page">11 / 14</div>
+ <div class="content">
+  <div class="section-title">AI编码质量四层防护网</div>
+  <div class="flow"><div class="node">① 预防<br><small>最小规则集</small></div><div class="connector">→</div><div class="node">② 生成<br><small>AI辅助编码</small></div><div class="connector">→</div><div class="node">③ 审查<br><small>AI辅助Review</small></div><div class="connector">→</div><div class="node">④ 入库<br><small>门禁拦截</small></div><div class="metric"><span class="kpi">-80%</span><small>告警流出</small></div><div class="metric"><span class="kpi">-30%</span><small>人工修复量</small></div></div>
+  <div class="grid2" style="margin-top:18px">
+   <div class="card"><h2>Skill体系化治理</h2>
+    <div class="flow" style="flex-wrap:wrap"><span class="pill">生产</span><span>→</span><span class="pill">归档</span><span>→</span><span class="pill">分发</span><span>→</span><span class="pill">甄别</span><span>→</span><span class="pill">升级</span><span>→</span><span class="pill">演化</span></div>
+    <p>安全合规扫描；多Agent共享目录；PR分诊 / 版本发布 / 安全分诊等治理工序skill化。</p>
+   </div>
+   <div class="card"><h2>知识工程（OKL）</h2><div class="metric-row"><div class="metric"><span class="kpi">6</span><small>团队</small></div><div class="metric"><span class="kpi">50+</span><small>仓库</small></div><div class="metric"><span class="kpi">50→80%</span><small>Spec准确率</small></div></div><p>三层混合Markdown知识体系，形成AI可检索、可消费的上下文。</p></div>
+   <div class="card"><h2>机械化门禁</h2><ul><li>可机器校验规则必须有verify脚本</li><li><b>exit non-zero</b> 才算真正落地</li><li>codecheck规则集CI + DT required patch</li></ul></div>
+   <div class="card"><h2>AI_POLICY显式契约</h2><p>AI可辅助编码 / Review / 设计 / 测试；Autonomous Agent不直接合入。</p><div class="banner">AI产出必须经Committer Review｜决策权在人</div></div>
+  </div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>AI先进生产力</span></div>
+</section>
+
+<section class="slide" id="p12">
+ <div class="head"><h1>工作开展思路（四）— 团队赋能</h1><div class="sub">子目标：能力持续传承——让Committer成为四属性承载者，让梯队断层不出现在本团队</div></div><div class="page">12 / 14</div>
+ <div class="content">
+  <div class="grid2">
+   <div>
+    <div class="card"><h2>履职画像｜四档成长标尺</h2><div class="flow"><span class="tag o">BRONZE</span><span>→</span><span class="tag">SILVER</span><span>→</span><span class="tag b">GOLD</span><span>→</span><span class="tag g">PLATINUM</span></div><p>未达bronze持续两季触发审视；“带出人”纳入画像：徒弟成长、授课、案例产出显性计分。</p></div>
+    <div class="card" style="margin-top:12px"><h2>AI时代学徒制｜重建练习场</h2><ul><li>junior逐行讲解AI diff，讲不出“为什么”不过</li><li>划定“古法特区”：DT设计、疑难攻关、故障复盘不外包</li><li><span class="blue">先古法后AI</span>，筑牢判断代码好坏的基本功</li></ul></div>
+    <div class="card" style="margin-top:12px"><h2>Senior时间再投向</h2><p>AI释放的时间用于“带junior干senior级别的活”：架构重构、疑难攻坚按难度阶梯下放。</p></div>
+   </div>
+   <div>
+    <div class="card"><h2>经验资产化｜形成正循环</h2>
+     <div class="flow" style="margin:14px 0"><div class="node">真实踩坑<br>经验</div><div class="connector">→</div><div class="node">Skill / Prompt<br>/ Rule</div><div class="connector">→</div><div class="node">AI + 知识<br>加速新人</div></div>
+     <div class="metric center"><span class="kpi">≥20篇</span><small>Committer经验Skill目标</small></div>
+    </div>
+    <div class="card" style="margin-top:12px"><h2>梯队硬保障</h2><ul><li>关键模块 / 关键能力强制双备份</li><li>“只有某某懂”本身就是治理缺陷</li><li>学习地图升级为cookbook + 分域知识包</li><li>Committer训战持续结合AI新范式迭代</li></ul></div>
+    <div class="quote" style="margin-top:12px">组织能力 = <b>人才梯队</b> × <b>知识资产</b> × <b>可执行机制</b></div>
+   </div>
+  </div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>团队赋能</span></div>
+</section>
+
+<section class="slide" id="p13">
+ <div class="head"><h1>个人下一步提升计划 — 对标不足，持续精进</h1><div class="sub">问题与行动一一对应，用可验证结果闭环个人成长</div></div><div class="page">13 / 14</div>
+ <div class="content">
+  <table style="font-size:14px"><tr><th style="width:24%">个人不足</th><th>提升计划</th><th style="width:22%">结果锚点</th></tr>
+   <tr><td><b>① 全领域架构视野需拓宽</b></td><td>持续演进OH 1+1+N；深入ASON、智能平台关键实现架构；问题→方案→架构→规范。</td><td><span class="blue">关键平台架构突破</span></td></tr>
+   <tr><td><b>② AI治理体系化仍需深化</b></td><td>深化四层防护体系；Skill与知识工程从起步走向体系化；探索Agent时代检视和Committer新角色。</td><td><span class="blue">可理解 / 演进 / 复用</span></td></tr>
+   <tr><td><b>③ 跨产品线影响力需扩大</b></td><td>对标开源治理与OTT生态；建立季度技术雷达；在ICT软件技术大会输出平台实践。</td><td><span class="blue">洞察→突破→传播</span></td></tr>
+   <tr><td><b>④ 系统性思维需加强</b></td><td>推动CMC2026从“谋定”到“后动”；规划—部署—落地全链路对齐；以版本节奏推进改革。</td><td><span class="blue">十大事务线分阶段落地</span></td></tr>
+   <tr><td><b>⑤ 技术总结输出需加强</b></td><td>让想法变代码、思路变文档、决策变ADR；架构约束固化为规范；培养一批骨干。</td><td><span class="blue">资产沉淀 + 人才梯队</span></td></tr>
+  </table>
+  <div class="section-title" style="margin-top:20px">成长闭环</div>
+  <div class="flow"><div class="node">对标不足</div><div class="connector">→</div><div class="node">制定动作</div><div class="connector">→</div><div class="node">版本化落地</div><div class="connector">→</div><div class="node">量化验证</div><div class="connector">→</div><div class="node">资产化沉淀</div><div class="connector">↺</div></div>
+  <div class="quote" style="margin-top:19px">提升不是“补短板”的一次性动作，而是<span class="blue">以业务结果检验、以组织资产固化</span>的持续循环。</div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>提升计划</span></div>
+</section>
+
+<section class="slide" id="p14">
+ <div class="head"><h1>写在最后</h1><div class="sub">真正的架构之美，在于经得起时间的考验</div></div><div class="page">14 / 14</div>
+ <div class="content">
+  <div class="grid2" style="gap:25px">
+   <div class="card" style="height:230px;background:linear-gradient(150deg,#fff,#f1f1f1)">
+    <h2>武汉长江大桥｜68年</h2><div class="metric-row"><div class="metric"><span class="kpi">200+</span><small>列火车 / 日</small></div><div class="metric"><span class="kpi">10万+</span><small>辆汽车 / 日</small></div></div><p>历经风雨，依然屹立于滚滚长江之上——<b>稳定，也通达。</b></p>
+   </div>
+   <div class="card" style="height:230px;background:linear-gradient(150deg,#fff,#fff6ea)">
+    <h2>应县木塔｜近千年</h2><div class="metric-row"><div class="metric"><span class="kpi">风雨</span><small>侵蚀</small></div><div class="metric"><span class="kpi">地震</span><small>摇曳</small></div></div><p>依旧傲然挺立于黄土大地之上——<b>坚韧，也传承。</b></p>
+   </div>
+  </div>
+  <div class="flow" style="margin:22px 0"><div class="node">稳定、灵活、可持续<br><small>系统如古塔般坚韧</small></div><div class="connector">×</div><div class="node">守住代码质量底线<br><small>工程底座如桥基牢固</small></div><div class="connector">×</div><div class="node">每次合入经得起检验<br><small>组织能力可累积传承</small></div></div>
+  <div class="quote center" style="font-size:23px;line-height:1.8;padding:20px">
+   从14年代码深耕到架构落地，从CMC运作到AI先进生产力探索，<br>
+   我的目标始终如一：<br>
+   <span class="red">做一名经得起时间考验的软件工程师，<br>构筑让产品成功、让团队成长的技术底座。</span>
+  </div>
+ </div><div class="foot"><span>光产品线软件平台技术专家答辩</span><span>谢谢</span></div>
+</section>
+
+<script>
+const requested = new URLSearchParams(location.search).get("page") || "1";
+const slide = document.getElementById("p" + requested) || document.getElementById("p1");
+slide.classList.add("active");
+</script>
+</body>
+</html>
