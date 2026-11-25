@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>MTG融入AI编码流程实践</title>
+<style>
+  @page { size: 960pt 540pt; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #fff; }
+  body {
+    font-family: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Noto Sans CJK SC", "WenQuanYi Micro Hei", sans-serif;
+    color: #000;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  em { font-style: normal; color: #0000FF; }
+  svg { position: absolute; left: 0; top: 0; overflow: visible; }
+  svg text { font-family: inherit; }
+
+  .slide {
+    position: relative;
+    width: 960pt;
+    height: 540pt;
+    margin: 0 auto;
+    background: #fff;
+    overflow: hidden;
+    font-size: 10pt;
+    line-height: 13pt;
+  }
+  @media screen { .slide { box-shadow: 0 0 0 1px #E0E0E0; } }
+
+  /* ---------- 大标题 / 副标题 ---------- */
+  .title {
+    position: absolute; left: 14pt; top: 7pt; height: 32pt;
+    font-size: 24pt; font-weight: bold; line-height: 32pt; color: #C00000;
+    white-space: nowrap;
+  }
+  .rule { position: absolute; left: 14pt; top: 41pt; width: 932pt; height: 1.5pt; background: #C00000; }
+
+  .sub {
+    position: absolute; left: 14pt; width: 932pt; height: 20pt;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 8pt 0 6pt;
+    background: #F2F2F2; border-left: 3pt solid #C00000;
+    font-size: 14pt; line-height: 20pt; font-weight: bold; color: #000;
+    white-space: nowrap;
+  }
+  .sub .side { font-size: 10.5pt; font-weight: normal; }
+  .sub .side em { font-weight: bold; }
+
+  /* ---------- 第一层 ---------- */
+  .req {
+    position: absolute; left: 14pt; top: 69pt; width: 932pt; height: 16pt;
+    font-size: 10.5pt; line-height: 16pt; white-space: nowrap;
+  }
+  .req .tag {
+    display: inline-block; height: 14pt; line-height: 14pt; padding: 0 5pt; margin-right: 5pt;
+    background: #C00000; color: #fff; font-weight: bold; font-size: 10pt; border-radius: 2pt;
+  }
+
+  .col {
+    position: absolute; top: 88pt; height: 238pt;
+    border: 1px solid #D0D0D0; border-radius: 4pt; padding: 4pt 5pt;
+  }
+  .c1 { left: 14pt; width: 220pt; }
+  .c2 { left: 240pt; width: 480pt; }
+  .c3 { left: 726pt; width: 220pt; }
+
+  .hl { height: 16pt; line-height: 16pt; font-size: 10.5pt; font-weight: bold; white-space: nowrap; }
+  .hl .no {
+    display: inline-block; height: 13pt; line-height: 13pt; padding: 0 4pt; margin-right: 4pt;
+    background: #0000FF; color: #fff; font-size: 10pt; border-radius: 2pt; vertical-align: 1pt;
+  }
+  .canvas { position: relative; margin-top: 3pt; height: 192pt; }
+  .vs { margin-top: 3pt; height: 14pt; line-height: 14pt; white-space: nowrap; }
+  .vs .x { color: #C00000; font-weight: bold; margin-right: 2pt; }
+  .vs .who { display: inline-block; height: 12pt; line-height: 12pt; padding: 0 3pt; margin-right: 3pt; background: #E7E7E7; border-radius: 2pt; }
+
+  /* 左：UML 源码 */
+  .code {
+    position: relative; height: 192pt; padding: 5pt 6pt;
+    background: #F7F8FA; border: 1px solid #D9D9D9; border-radius: 3pt;
+    font-family: Consolas, "Courier New", "DejaVu Sans Mono", "Microsoft YaHei", "微软雅黑", "WenQuanYi Micro Hei", monospace;
+    font-size: 10pt; line-height: 12pt; white-space: pre; overflow: hidden;
+  }
+  .code .k { color: #0000FF; }
+  .code .lang {
+    position: absolute; right: 0; top: 0; height: 13pt; line-height: 13pt; padding: 0 5pt;
+    background: #D9D9D9; border-radius: 0 3pt 0 3pt;
+    font-family: "Microsoft YaHei", "微软雅黑", "WenQuanYi Micro Hei", sans-serif;
+  }
+  .t1c { color: #C55A11; font-weight: bold; }
+  .t2c { color: #548235; font-weight: bold; }
+  .t3c { color: #7030A0; font-weight: bold; }
+
+  /* 中：立体叠层活动图 */
+  .stack { position: absolute; width: 110pt; height: 70pt; }
+  .ly {
+    position: absolute; width: 98pt; height: 28pt;
+    border: 1px solid; border-radius: 5pt;
+    box-shadow: 1pt 1.5pt 2.5pt rgba(0, 0, 0, .3);
+    white-space: nowrap; overflow: hidden;
+  }
+  .act {
+    left: 0; top: 0; z-index: 4;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    background: #fff; border-color: #595959;
+    font-weight: bold; line-height: 12pt;
+  }
+  .l1, .l2, .l3 { padding: 14pt 0 0 4pt; line-height: 13pt; }
+  .l1 b, .l2 b, .l3 b { margin-right: 4pt; }
+  .l1 { left: 4pt; top: 14pt; z-index: 3; background: #FCE4D6; border-color: #F4B183; }
+  .l2 { left: 8pt; top: 28pt; z-index: 2; background: #E2EFDA; border-color: #A9D08E; }
+  .l3 { left: 12pt; top: 42pt; z-index: 1; background: #E4DFEC; border-color: #B1A0C7; }
+  .l1 b { color: #C55A11; }
+  .l2 b { color: #548235; }
+  .l3 b { color: #7030A0; }
+  .stack.on .act {
+    border: 1.5pt solid #C00000; background: #FFF6F6;
+    box-shadow: 0 0 0 2pt rgba(192, 0, 0, .16), 1pt 1.5pt 2pt rgba(0, 0, 0, .25);
+  }
+
+  .pill {
+    position: absolute; height: 13pt; line-height: 13pt; padding: 0 4pt;
+    border-radius: 7pt; color: #fff; font-weight: bold; white-space: nowrap;
+  }
+  .pill.p1 { background: #C00000; }
+  .pill.p2 { background: #7F7F7F; }
+
+  .note {
+    position: absolute; left: 353pt; top: 1pt; width: 114pt; height: 43pt;
+    padding: 1.5pt 0 0 5pt; line-height: 13pt; white-space: nowrap;
+    border: 1px dashed #7F7F7F; border-radius: 3pt; background: #fff;
+  }
+  .legend { position: absolute; left: 0; top: 177pt; width: 100%; height: 14pt; line-height: 14pt; white-space: nowrap; }
+  .legend .ln { display: inline-block; width: 18pt; vertical-align: 3pt; margin-right: 3pt; }
+  .legend .ln.red { border-top: 2pt solid #C00000; }
+  .legend .ln.grey { border-top: 1pt solid #7F7F7F; margin-left: 10pt; }
+
+  /* 右：用例结构 / 用例范围 */
+  .bt { height: 13pt; line-height: 13pt; font-weight: bold; white-space: nowrap; }
+  .tc { border: 1px solid #BFBFBF; border-radius: 3pt; overflow: hidden; }
+  .tc-h { height: 14pt; line-height: 14pt; padding: 0 4pt; background: #F2F2F2; font-weight: bold; white-space: nowrap; }
+  .r { height: 13pt; line-height: 13pt; padding: 0 3pt; white-space: nowrap; }
+  .t {
+    display: inline-block; width: 24pt; height: 11.5pt; line-height: 11.5pt; margin-right: 4pt;
+    text-align: center; font-style: normal; font-weight: bold; border-radius: 2pt;
+  }
+  .tp { background: #C00000; color: #fff; }
+  .ta { background: #fff; color: #000; box-shadow: inset 0 0 0 1px #595959; }
+  .t1 { background: #FCE4D6; color: #C55A11; }
+  .t2 { background: #E2EFDA; color: #548235; }
+  .t3 { background: #E4DFEC; color: #7030A0; }
+  .scope { margin-top: 5pt; }
+  .sum { margin-top: 4pt; height: 13pt; line-height: 13pt; font-weight: bold; white-space: nowrap; }
+
+  /* ---------- 第二层 ---------- */
+  .flow { position: absolute; left: 14pt; top: 354pt; width: 932pt; height: 74pt; }
+  .n {
+    position: absolute; top: 6pt; height: 28pt;
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid #7F7F7F; border-radius: 4pt; background: #fff;
+    font-size: 10.5pt; white-space: nowrap;
+  }
+  .n.b { top: 46pt; height: 26pt; }
+  .n.m { border: 1.5pt solid #0000FF; background: #EEF2FF; color: #0000FF; font-weight: bold; }
+  .loop {
+    position: absolute; left: 496pt; top: 2pt; width: 212pt; height: 36pt;
+    border: 1px dashed #595959; border-radius: 5pt; background: #FAFAFA;
+  }
+  .loop .lb { position: absolute; left: 5pt; top: 5pt; width: 60pt; line-height: 12.5pt; text-align: center; font-weight: bold; white-space: nowrap; }
+  .loop .n { top: 6pt; height: 22pt; font-size: 10pt; }
+  .fnote { position: absolute; left: 0; top: 46pt; width: 286pt; line-height: 13pt; white-space: nowrap; }
+  .fnote .sw { display: inline-block; width: 10pt; height: 8pt; margin-right: 3pt; border: 1.5pt solid #0000FF; background: #EEF2FF; border-radius: 2pt; }
+  .flabel { position: absolute; left: 596pt; top: 45pt; width: 176pt; line-height: 12pt; text-align: center; white-space: nowrap; }
+
+  /* ---------- 第三层 ---------- */
+  .kpi {
+    position: absolute; top: 456pt; width: 304pt; height: 70pt;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 10pt 0 10pt;
+    border: 1px solid #D0D0D0; border-left: 4pt solid #C00000; border-radius: 4pt;
+    white-space: nowrap;
+  }
+  .kpi .kt { font-size: 11pt; line-height: 16pt; font-weight: bold; }
+  .kpi .kd { line-height: 14pt; margin-top: 2pt; }
+  .kpi .kr { display: flex; align-items: flex-end; }
+  .kpi .v { text-align: center; }
+  .kpi .v .num { line-height: 28pt; }
+  .kpi .v .cap { line-height: 12pt; }
+  .kpi .old .num { font-size: 18pt; }
+  .kpi .new .num { font-size: 24pt; font-weight: bold; color: #0000FF; }
+  .kpi .u { font-size: 10pt; font-weight: normal; margin-left: 1pt; }
+  .kpi .ar { position: static; width: 26pt; height: 40pt; margin: 0 5pt; flex: none; }
+</style>
+</head>
+<body>
+<div class="slide">
+
+  <div class="title">MTG融入AI编码流程：DT测得对、测得全，促成AI编码质量持续提升</div>
+  <div class="rule"></div>
+
+  <!-- ================= 第一层：MTG生成DT用例方案 ================= -->
+  <div class="sub" style="top:46pt">
+    <span>MTG生成DT用例方案：需求建模 → 图形化评审 → 工具生成用例</span>
+    <span class="side">对比纯文字描述生成DT用例：<em>AI理解更准 · 人工评审更易 · 用例更准更全</em></span>
+  </div>
+
+  <div class="req"><span class="tag">输入｜需求描述</span>采集组件初始化后进入空闲状态；下发采集配置后接收一帧数据：接收成功，文件按常规命名落盘；接收失败，结束当前帧接收；之后均恢复空闲状态。</div>
+
+  <!-- 左 1/4：UML 源码节选 -->
+  <div class="col c1">
+    <div class="hl"><span class="no">亮点1</span>UML结构化表达，<em>AI亲和、易理解</em></div>
+    <div class="canvas">
+<div class="code"><span class="lang">活动图UML源码（节选）</span><span class="k">start</span>
+:组件初始化，进入空闲状态;
+:下发采集配置，接收一帧数据;
+<span class="k">note right</span>
+  <span class="t1c">约束</span>: 仅空闲态下发
+  <span class="t2c">规格</span>: 帧长≤上限
+  <span class="t3c">边界</span>: 空帧/超长帧
+<span class="k">end note</span>
+<span class="k">if</span> (接收结果?) <span class="k">then</span> (成功)
+  :文件按常规命名落盘;
+<span class="k">else</span> (失败)
+  :结束当前帧接收;
+<span class="k">endif</span>
+:恢复空闲状态;
+<span class="k">stop</span></div>
+    </div>
+    <div class="vs"><span class="x">✗</span><span class="who">纯文字</span>表述有歧义，AI理解靠猜</div>
+  </div>
+
+  <!-- 中 1/2：立体叠层活动图 -->
+  <div class="col c2">
+    <div class="hl"><span class="no">亮点2</span>建模图形化，<em>人容易理解、评审</em>；每条路径即一个测试路径，<em>可做全路径覆盖</em></div>
+    <div class="canvas">
+      <svg viewBox="0 0 468 192" style="width:468pt;height:192pt">
+        <defs>
+          <marker id="ag" viewBox="0 0 8 8" refX="7.6" refY="4" markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0.6 L8,4 L0,7.4 Z" fill="#7F7F7F"/></marker>
+          <marker id="ar" viewBox="0 0 8 8" refX="7.6" refY="4" markerWidth="7.5" markerHeight="7.5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0.6 L8,4 L0,7.4 Z" fill="#C00000"/></marker>
+        </defs>
+
+        <!-- 其他路径（P2 失败分支） -->
+        <g fill="none" stroke="#7F7F7F" stroke-width="1">
+          <path d="M198,114 H228" marker-end="url(#ag)"/>
+          <path d="M326,114 H345 V65"/>
+        </g>
+
+        <!-- 标亮测试路径 P1 -->
+        <g fill="none" stroke="#C00000" stroke-width="2" stroke-linejoin="round">
+          <path d="M16,16 H28" marker-end="url(#ar)"/>
+          <path d="M77,72 V100" marker-end="url(#ar)"/>
+          <path d="M126,114 H150" marker-end="url(#ar)"/>
+          <path d="M174,90 V16 H228" marker-end="url(#ar)"/>
+          <path d="M326,16 H345 V65 H358" marker-end="url(#ar)"/>
+          <path d="M407,121 V134" marker-end="url(#ar)"/>
+        </g>
+        <circle cx="345" cy="65" r="2.4" fill="#C00000"/>
+
+        <!-- 开始 / 结束 -->
+        <circle cx="10" cy="16" r="6" fill="#000"/>
+        <circle cx="407" cy="141" r="6.5" fill="#fff" stroke="#000" stroke-width="1.2"/>
+        <circle cx="407" cy="141" r="3.8" fill="#000"/>
+
+        <!-- 判定：接收结果 -->
+        <polygon points="174,90 198,114 174,138 150,114" fill="#FFF6F6" stroke="#C00000" stroke-width="1.5"/>
+        <text x="174" y="111.5" font-size="10" font-weight="bold" text-anchor="middle">接收</text>
+        <text x="174" y="123" font-size="10" font-weight="bold" text-anchor="middle">结果</text>
+
+        <text x="201" y="12" font-size="10" font-weight="bold" fill="#C00000" text-anchor="middle">[成功]</text>
+        <text x="213" y="110" font-size="10" text-anchor="middle">[失败]</text>
+        <text x="418" y="145" font-size="10">结束</text>
+      </svg>
+
+      <div class="stack on" style="left:28pt;top:2pt">
+        <div class="ly act">组件初始化，<br>进入空闲状态</div>
+        <div class="ly l1"><b>约束</b>仅初始化一次</div>
+        <div class="ly l2"><b>规格</b>初始态=空闲</div>
+        <div class="ly l3"><b>边界</b>重复初始化</div>
+      </div>
+
+      <div class="stack on" style="left:28pt;top:100pt">
+        <div class="ly act">下发采集配置，<br>接收一帧数据</div>
+        <div class="ly l1"><b>约束</b>仅空闲态下发</div>
+        <div class="ly l2"><b>规格</b>帧长≤上限</div>
+        <div class="ly l3"><b>边界</b>空帧/超长帧</div>
+      </div>
+
+      <div class="stack on" style="left:228pt;top:2pt">
+        <div class="ly act">文件按常规<br>命名落盘</div>
+        <div class="ly l1"><b>约束</b>整帧校验通过</div>
+        <div class="ly l2"><b>规格</b>命名符合规则</div>
+        <div class="ly l3"><b>边界</b>磁盘满/重名</div>
+      </div>
+
+      <div class="stack" style="left:228pt;top:100pt">
+        <div class="ly act">结束当前帧接收</div>
+        <div class="ly l1"><b>约束</b>残帧不落盘</div>
+        <div class="ly l2"><b>规格</b>上报失败原因</div>
+        <div class="ly l3"><b>边界</b>连续失败</div>
+      </div>
+
+      <div class="stack on" style="left:358pt;top:51pt">
+        <div class="ly act">恢复空闲状态</div>
+        <div class="ly l1"><b>约束</b>释放帧资源</div>
+        <div class="ly l2"><b>规格</b>可再次下发</div>
+        <div class="ly l3"><b>边界</b>恢复中再下发</div>
+      </div>
+
+      <div class="pill p1" style="left:180pt;top:25pt">路径P1</div>
+      <div class="pill p2" style="left:201pt;top:119pt">P2</div>
+
+      <div class="note"><b>立体Action = 动作本身</b><br>+ <b class="t1c">约束</b> + <b class="t2c">规格</b> + <b class="t3c">边界</b><br>层层叠加，补全需求</div>
+
+      <div class="legend"><span class="ln red"></span><b style="color:#C00000">标亮路径P1（成功落盘）</b>= 一个测试路径<span class="ln grey"></span>P2（接收失败）　⇒　<em>全路径覆盖 2/2</em></div>
+    </div>
+    <div class="vs"><span class="x">✗</span><span class="who">纯文字</span>分支与异常散落在段落中，人难评审，路径是否测全无从度量</div>
+  </div>
+
+  <!-- 右 1/4：生成的用例结构与范围 -->
+  <div class="col c3">
+    <div class="hl"><span class="no">亮点3</span>工具生成用例，<em>测得准、测得全</em></div>
+    <div class="canvas">
+      <div class="bt">用例结构（色块对应模型叠层）</div>
+      <div class="tc">
+        <div class="tc-h">TC_P1_01 成功接收，常规命名落盘</div>
+        <div class="r"><i class="t tp">路径</i>P1 初始化→接收[成功]→落盘→空闲</div>
+        <div class="r"><i class="t t1">前置</i>组件已初始化，处于空闲态</div>
+        <div class="r"><i class="t ta">步骤</i>下发采集配置，注入一帧数据</div>
+        <div class="r"><i class="t t2">断言</i>文件按常规命名落盘，回到空闲</div>
+        <div class="r"><i class="t t3">数据</i>帧长取边界值（=上限）</div>
+      </div>
+
+      <div class="bt scope">用例范围（全路径 × 叠层信息）</div>
+      <div class="r"><i class="t tp">路径</i>P1成功落盘、P2接收失败 <em>2/2</em></div>
+      <div class="r"><i class="t t2">正常</i>各路径 × 规格断言</div>
+      <div class="r"><i class="t t1">异常</i>非空闲态下发、重复初始化</div>
+      <div class="r"><i class="t t3">边界</i>空帧、超长帧、磁盘满、重名</div>
+
+      <div class="sum"><em>每条用例可追溯到模型路径与叠层</em></div>
+    </div>
+    <div class="vs"><span class="x">✗</span><span class="who">纯文字</span>AI自由发挥，用例无效、易遗漏</div>
+  </div>
+
+  <!-- ================= 第二层：MTG融入AI编码E2E流程 ================= -->
+  <div class="sub" style="top:330pt"><span>MTG融入AI编码E2E流程</span></div>
+
+  <div class="flow">
+    <svg viewBox="0 0 932 74" style="width:932pt;height:74pt">
+      <defs>
+        <marker id="fg" viewBox="0 0 8 8" refX="7.6" refY="4" markerWidth="6.5" markerHeight="6.5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0.6 L8,4 L0,7.4 Z" fill="#595959"/></marker>
+        <marker id="fb" viewBox="0 0 8 8" refX="7.6" refY="4" markerWidth="7" markerHeight="7" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0.6 L8,4 L0,7.4 Z" fill="#0000FF"/></marker>
+      </defs>
+      <g fill="none" stroke="#595959" stroke-width="1.2">
+        <path d="M92,20 H118" marker-end="url(#fg)"/>
+        <path d="M210,20 H236" marker-end="url(#fg)"/>
+        <path d="M352,20 H378" marker-end="url(#fg)"/>
+        <path d="M470,20 H496" marker-end="url(#fg)"/>
+        <path d="M708,20 H734" marker-end="url(#fg)"/>
+        <path d="M826,20 H852" marker-end="url(#fg)"/>
+      </g>
+      <g fill="none" stroke="#0000FF" stroke-width="1.5">
+        <path d="M294,34 V59 H378" marker-end="url(#fb)"/>
+        <path d="M470,59 H496" marker-end="url(#fb)"/>
+        <path d="M588,59 H780 V34" stroke-dasharray="4 3" marker-end="url(#fb)"/>
+      </g>
+    </svg>
+
+    <div class="n" style="left:0;width:92pt">AR设计</div>
+    <div class="n" style="left:118pt;width:92pt">需求澄清</div>
+    <div class="n m" style="left:236pt;width:116pt">需求MTG建模</div>
+    <div class="n" style="left:378pt;width:92pt">实现设计</div>
+
+    <div class="loop">
+      <svg viewBox="0 0 212 36" style="width:212pt;height:36pt">
+        <g fill="none" stroke="#595959" stroke-width="1.1">
+          <path d="M108,12 C117,4 133,4 142,11" marker-end="url(#fg)"/>
+          <path d="M142,23 C133,31 117,31 108,24" marker-end="url(#fg)"/>
+        </g>
+      </svg>
+      <div class="lb">开发小循环<br>（TDD）</div>
+      <div class="n" style="left:70pt;width:36pt">UT</div>
+      <div class="n" style="left:144pt;width:60pt">代码实现</div>
+    </div>
+
+    <div class="n" style="left:734pt;width:92pt">集成验证</div>
+    <div class="n" style="left:852pt;width:80pt">上库</div>
+
+    <div class="n b m" style="left:378pt;width:92pt">生成文本用例</div>
+    <div class="n b m" style="left:496pt;width:92pt">生成DT用例</div>
+
+    <div class="flabel">DT用例在集成验证中执行</div>
+    <div class="fnote"><span class="sw"></span><em><b>MTG融入点</b></em>：需求澄清结论沉淀为模型，人评审模型；<br>文本用例、DT用例由同一模型生成，与需求同源</div>
+  </div>
+
+  <!-- ================= 第三层：实践效果 ================= -->
+  <div class="sub" style="top:432pt"><span>实践效果</span></div>
+
+  <div class="kpi" style="left:14pt">
+    <div>
+      <div class="kt">需求理解相关功能问题占比</div>
+      <div class="kd">需求经模型评审，理解一致</div>
+    </div>
+    <div class="kr">
+      <div class="v old"><div class="num">41%</div><div class="cap">实践前</div></div>
+      <svg class="ar" viewBox="0 0 26 40"><path d="M1,14 H24" fill="none" stroke="#595959" stroke-width="1.5"/><path d="M18,9.5 L25,14 L18,18.5 Z" fill="#595959"/></svg>
+      <div class="v new"><div class="num">0%</div><div class="cap">实践后</div></div>
+    </div>
+  </div>
+
+  <div class="kpi" style="left:328pt">
+    <div>
+      <div class="kt">无效DT用例</div>
+      <div class="kd">用例由模型生成，条条有效</div>
+    </div>
+    <div class="kr">
+      <div class="v old"><div class="num">100+</div><div class="cap">实践前</div></div>
+      <svg class="ar" viewBox="0 0 26 40"><path d="M1,14 H24" fill="none" stroke="#595959" stroke-width="1.5"/><path d="M18,9.5 L25,14 L18,18.5 Z" fill="#595959"/></svg>
+      <div class="v new"><div class="num">0</div><div class="cap">实践后</div></div>
+    </div>
+  </div>
+
+  <div class="kpi" style="left:642pt">
+    <div>
+      <div class="kt">遗留缺陷密度</div>
+      <div class="kd">DT测得对、测得全</div>
+    </div>
+    <div class="kr">
+      <div class="v old"><div class="num">2.6<span class="u">个/kloc</span></div><div class="cap">实践前</div></div>
+      <svg class="ar" viewBox="0 0 26 40"><path d="M1,14 H24" fill="none" stroke="#595959" stroke-width="1.5"/><path d="M18,9.5 L25,14 L18,18.5 Z" fill="#595959"/></svg>
+      <div class="v new"><div class="num">1<span class="u">个/kloc</span></div><div class="cap">实践后</div></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
